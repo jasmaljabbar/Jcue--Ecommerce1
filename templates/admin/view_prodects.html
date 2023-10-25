@@ -1,0 +1,61 @@
+{% extends "admin/admin_dsh.html" %}
+{% block main %}
+
+    <div class="container">
+        <div class="row p-2">
+            <div class="col-lg-6 ">
+                <div class="row">
+                    <div class="col-3 col-md-6 p-2">
+                        <img src="{{ prodects.image1.url }}" style="height: 250px; width: auto; box-shadow: 0px 0px 4px rgba(0,0,0,0.5)">
+                    </div>
+                    <div class="col-3 col-md-6 p-2">
+                        <img src="{{ prodects.image2.url }}" style="height: 250px; width: auto; box-shadow: 0px 0px 4px rgba(0,0,0,0.5)">
+                    </div>
+                    <div class="col-3 col-md-6 p-2">
+                        <img src="{{ prodects.image3.url }}" style="height: 250px; width: auto; box-shadow: 0px 0px 4px rgba(0,0,0,0.5)">
+                    </div>
+                    <div class="col-3 col-md-6 p-2">
+                        <img src="{{ prodects.image4.url }}" style="height: 250px; width: auto; box-shadow: 0px 0px 4px rgba(0,0,0,0.5)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <table class="table table-borderless ">
+                    <tr>
+                        <th>Product Name</th>
+                        <td>{{ prodects.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ prodects.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Brand</th>
+                        <td>{{ prodects.brand }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ prodects.category }}</td>
+                    </tr>
+                    <tr>
+                        <th>Stock</th>
+                        <td>{{ prodects.stock }}</td>
+                    </tr>
+                    <tr>
+                        <th>Price</th>
+                        <td>₹ {{ prodects.price }}</td>
+                    </tr>
+                    <tr>
+                        <th>old Price</th>
+                        <td>₹ {{ prodects.old_price }}</td>
+                    </tr>
+
+                </table>
+                <a href="{% url 'edit_prodect' prodects.id  %}", class="btn btn-primary">Edit</a>
+                <a href="#", class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

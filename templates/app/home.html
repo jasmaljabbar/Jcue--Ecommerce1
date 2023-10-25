@@ -1,0 +1,185 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %}
+  Home
+{% endblock title %} 
+{% block banner_slider %}
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'app/images/banner/b1.png' %}" class="d-block w-100" alt="banner image">
+    </div>
+    <div class="carousel-item ">
+      <img src="{% static 'app/images/banner/b2.png' %}" class="d-block w-100" alt="banner image">
+    </div>
+    <div class="carousel-item ">
+      <img src="{% static 'app/images/banner/b3.png' %}" class="d-block w-100" alt="banner image">
+    </div>
+  
+  </div>
+</div>
+{% endblock banner_slider %}
+
+{% block information %}
+<div class="container">
+  <div class="row bg-success text-center p-5 text-white border-bottom shadow">
+    <h1>products</h1>
+    <small class="fs-5">Get extra 16% off (price inclusive of cashback/coupon) Problem Solving, Social Skills, Creativity & Imagination, Time Management, General Knowledge, Color & Shape Recognition</small>
+  </div>
+</div>
+{% endblock information %}
+
+{% block main-content %}
+<div class="container">
+  
+  <h1>I'm gona king of the python </h1>
+  <br><br>
+  <div class="row container">
+    <div
+      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+      date-wow-duration="1s"
+      data-wow-delay="0.6s"
+      style="
+        animation-duration: 1s;
+        animation-delay: 0.6s;
+        animation-name: none;
+      "
+    >
+      <div class="goodnesssec home_rub smbg">
+        <a href="#">
+          <div class="rubics_home1 text-center">
+            <img
+              src="{% static 'app/images/prodect/drift megaminx .jpg' %}"
+              class="img-responsive center-block"
+              alt=""
+            />
+            <p class="mlkpro">megaminx</p>
+          </div>
+        </a>
+      </div>
+    </div>
+      <div
+      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+      date-wow-duration="1s"
+      data-wow-delay="0.6s"
+      style="
+        animation-duration: 1s;
+        animation-delay: 0.6s;
+        animation-name: none;
+      "
+    >
+      <div class="goodnesssec home_rub mir">
+        <a href="#">
+          <div class="rubics_home1 text-center">
+            <img
+              src="{% static 'app/images/prodect/gan mirror m (magnetic).jpg' %}"
+              class="img-responsive center-block"
+              alt=""
+            />
+            <p class="mlkpro">mirror</p>
+          </div>
+        </a>
+      </div>
+    </div>
+      <div
+      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+      date-wow-duration="1s"
+      data-wow-delay="0.6s"
+      style="
+        animation-duration: 1s;
+        animation-delay: 0.6s;
+        animation-name: none;
+      "
+    >
+      <div class="goodnesssec home_rub mfj">
+        <a href="#">
+          <div class="rubics_home1 text-center">
+            <img
+              src="{% static 'app/images/prodect/mfjs meilong 12x12.jpg' %}"
+              class="img-responsive center-block"
+              alt=""
+            />
+            <p class="mlkpro">mfjs</p>
+          </div>
+        </a>
+      </div>
+    </div>
+      
+    </div>
+    <br><br>
+    <div class="row container">
+      <div
+        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+        date-wow-duration="1s"
+        data-wow-delay="0.6s"
+        style="
+          animation-duration: 1s;
+          animation-delay: 0.6s;
+          animation-name: none;
+        "
+      >
+        <div class="goodnesssec home_rub smbg">
+          <a href="#">
+            <div class="rubics_home1 text-center">
+              <img
+                src="{% static 'app/images/prodect/twist 3x3 speedcube.jpg' %}"
+                class="img-responsive center-block"
+                alt=""
+              />
+              <p class="mlkpro">twist</p>
+            </div>
+          </a>
+        </div>
+      </div>
+        <div
+        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+        date-wow-duration="1s"
+        data-wow-delay="0.6s"
+        style="
+          animation-duration: 1s;
+          animation-delay: 0.6s;
+          animation-name: none;
+        "
+      >
+        <div class="goodnesssec home_rub mir">
+          <a href="#">
+            <div class="rubics_home1 text-center">
+              <img
+                src="{% static 'app/images/prodect/sequential movement.jpg' %}"
+                class="img-responsive center-block"
+                alt=""
+              />
+              <p class="mlkpro">sequential</p>
+            </div>
+          </a>
+        </div>
+      </div>
+        <div
+        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
+        date-wow-duration="1s"
+        data-wow-delay="0.6s"
+        style="
+          animation-duration: 1s;
+          animation-delay: 0.6s;
+          animation-name: none;
+        "
+      >
+        <div class="goodnesssec home_rub mfj">
+          <a href="#">
+            <div class="rubics_home1 text-center">
+              <img
+                src="{% static 'app/images/prodect/rubiks connected 3x3 (magnetic).jpg' %}"
+                class="img-responsive center-block"
+                alt=""
+              />
+              <p class="mlkpro">connected 3x3</p>
+            </div>
+          </a>
+        </div>
+      </div>
+        
+      </div>
+  </div>
+</div>
+<br><br>
+{% endblock main-content %}

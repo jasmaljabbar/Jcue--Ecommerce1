@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title> Daily Products | {% block title %}
+    {% endblock title %}</title>
+  </head>
+  <body>
+   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3 mb-0 bg-body rounded">
+      <div class="container-fluid">
+        <span>
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'app/images/Logo.png' %}" width="90" height="40"/>
+        </a>
+      </span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link active" href="#">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active " href="#">Contact Us</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                products
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">3x3_RUBIKS</a></li>
+                <li><a class="dropdown-item" href="#">4x4_RUBIKS</a></li>
+                <li><a class="dropdown-item" href="#">5x5_RUBIKS</a></li>
+                <li><a class="dropdown-item" href="#">BIG_CUBES</a></li>
+                <li><a class="dropdown-item" href="#">MEGAMINX</a></li>
+                <li><a class="dropdown-item" href="#">PYRAMINX</a></li>
+                
+              </ul>
+            </li>
+          </ul>
+          <!-- ... (previous code) ... -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    
+    <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success mx-2" type="submit">Search</button>
+    </form>
+      <!-- ... (previous code) ... -->
+      <div>
+          <a class="navbar-brand" href="#">
+              <i class="fa-solid fa-cart-shopping"></i>
+          </a>
+          <a class="navbar-brand" href="#">
+              <i class="fa-regular fa-heart"></i>
+          </a>
+          <a class="navbar-brand" href="#">
+              <i class="fa-regular fa-user"></i>
+          </a>
+          
+          <!-- Add Login and User Registration buttons here -->
+          <a class="btn btn-primary" href="{% url 'user_login' %}">Login</a>
+          <a class="btn btn-success" href="{% url 'sign_up' %}">User Registration</a>
+      </div>
+  </div>
+</nav>
+
+<!-- ... (rest of your code) ... -->
+
+        </div>
+        <br>
+        
+      </div>
+    </nav>
+
+    {% block banner_slider %}{% endblock banner_slider %}
+    {% block information %}{% endblock information %}
+    {% block main-content %}{% endblock main-content %}
+
+    <footer class="container-fluid fixed-bottom bg-dark text-center p-2 mt-5 text-light">
+      copyright : 2022 || Develop by : Jasmal
+    </footer>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+    </script>
+    <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'app/js/myscript.js' %}"></script>
+    <script src="{% static 'app/js/all.min.js' %}"></script>
+  </body>
+</html>
