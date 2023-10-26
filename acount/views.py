@@ -6,6 +6,7 @@ import pyotp
 from datetime import datetime
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from admin_sid.models import *
 
 # Create your views here.
 
@@ -17,7 +18,6 @@ def home_all(request):
 
 def home(request):
     if request.user.is_authenticated:
-
         return render(request,"app/home.html")
     else:
         return render(request,"app/home_all.html")
@@ -66,15 +66,7 @@ def otp(request):
 
 def otp_perform(request):
     if request.method == 'POST':
-        digit1 = request.POST.get('digit1', '')
-        digit2 = request.POST.get('digit2', '')
-        digit3 = request.POST.get('digit3', '')
-        digit4 = request.POST.get('digit4', '')
-        digit5 = request.POST.get('digit5', '')
-        digit6 = request.POST.get('digit6', '')
-
-        combined_otp = digit1 + digit2 + digit3 + digit4 + digit5 + digit6
-        otp = combined_otp
+        otp = request.POST.get('otp')
         user_data = request.session.get('user_data')
         otp_key = request.session.get('otp_key')
         otp_valid = request.session.get('otp_valid')
@@ -133,8 +125,22 @@ def home_perform(request):
     else:
         return render(request,'app/home_all.html')
     
+def rubik_3(request):
+    if request.user.is_authenticated:
+        product = Prodect.objects.all()
+        return render(request,'app/3x3rubiks.html',{'product':product})
+    else:
+        return render(request,"app/home_all.html")
+    
+def view_product(request,pid):
+    vi_product = Prodect.objects.get(id=pid)
+    return render(request,'app/view_product.html',{'vi_product':vi_product})
+    
 
 def log_out(request):
     request.session.flush() 
     logout(request)
-    return redirect('user_login')
+    return redirect('/')
+
+
+

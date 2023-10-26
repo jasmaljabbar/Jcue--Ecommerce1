@@ -10,11 +10,15 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+  
 
     <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}" />
     <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <title> Daily Products | {% block title %}
     {% endblock title %}</title>
   </head>
@@ -47,7 +51,7 @@
                 products
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">3x3_RUBIKS</a></li>
+                <li><a class="dropdown-item" href="{% url 'rubik_3' %}">3x3_RUBIKS</a></li>
                 <li><a class="dropdown-item" href="#">4x4_RUBIKS</a></li>
                 <li><a class="dropdown-item" href="#">5x5_RUBIKS</a></li>
                 <li><a class="dropdown-item" href="#">BIG_CUBES</a></li>

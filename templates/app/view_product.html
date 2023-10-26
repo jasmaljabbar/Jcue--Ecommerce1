@@ -1,0 +1,101 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %}
+  Home
+{% endblock title %} 
+{% block main-content %}
+
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center p-5">
+            <div class="col-lg-6 col-12">
+                <div class="row product-img d-flex justify-content-center">
+                    <div class="col-12 my-2 d-flex justify-content-center">
+                        <img class="zoomable-image" src="{{ vi_product.image1.url }}" style="width: auto; height: 300px;" alt="">
+                    </div>
+                    <div class="col-md-2  col-2 col-sm-12 my-2">
+                        <img class="zoomable-image" src="{{ vi_product.image2.url }}" style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-md-2  col-2 col-sm-12 my-2">
+                        <img class="zoomable-image" src="{{ vi_product.image3.url }}" style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-md-2  col-2 col-sm-12 my-2">
+                        <img class="zoomable-image" src="{{ vi_product.image4.url }}" style="width: 100px; height: 100px;" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-12">
+                <table class="table">
+                    <tr>
+                        <td>Product Name</td>
+                        <th class="text-capitalize">{{ vi_product.title }}</th>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <th class="text-capitalize">{{ vi_product.description }}</th>
+                    </tr>
+                    <tr>
+                        <td>Brand</td>
+                        <th class="text-capitalize">{{ vi_product.brand.title }}</th>
+                    </tr>
+                    <tr>
+                        <td>Category</td>
+                        <th class="text-capitalize">{{ vi_product.category.title }}</th>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <th class="text-capitalize">₹ {{ vi_product.price }} <del><small>₹{{ vi_product.old_price }}</small></del></th>
+                    </tr>
+                    <tr>
+                        <td>Availability</td>
+                        <th class="text-capitalize">
+                            {% if product.stock > 0 %}
+                                <span class="text-success">Available</span>
+                            {% else %}
+                                <span class="text-danger">Out of Stock</span>
+                            {% endif %}
+                        </th>
+                    </tr>
+                </table>
+                <div class="my-5">
+                    <a href="" class="btn btn-warning mx-2 px-2">Add to Cart</a>
+                    <a href="" class="btn btn-primary mx-2 px-2">Buy Now</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+
+document.querySelectorAll('.zoomable-image').forEach(function(image) {
+    image.addEventListener('click', function() {
+        var zoomedImg = document.createElement('img');
+        zoomedImg.src = image.src;
+        zoomedImg.classList.add('zoomed-image');
+        var modal = document.createElement('div');
+        modal.classList.add('image-modal');
+        modal.appendChild(zoomedImg);
+        document.body.appendChild(modal);
+
+        zoomedImg.addEventListener('mouseover', function() {
+            zoomedImg.style.transform = 'scale(1.5)';
+        });
+
+        zoomedImg.addEventListener('mouseout', function() {
+            zoomedImg.style.transform = 'scale(1)';
+        });
+    });
+});
+
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('image-modal')) {
+        event.target.remove();
+    }
+});
+
+
+</script>
+
+
+{% endblock %}  
