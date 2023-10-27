@@ -15,6 +15,8 @@ from admin_sid.models import *
             
 
 def home_all(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     product = Prodect.objects.all()
     return render(request,"app/home_all.html",{'product':product})
 

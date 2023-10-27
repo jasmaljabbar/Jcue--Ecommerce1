@@ -2,6 +2,16 @@
     width: 100%;
 }
 
+#sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Adjust the z-index as needed */
+  }
+  
+  
+
 .home_rub{
     background-color: #fff;background-image: linear-gradient(#fff7ef,#fff);
     background-image: -webkit-linear-gradient(#fff7ef,#fff);
