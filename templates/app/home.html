@@ -19,167 +19,119 @@
   </div>
 </div>
 {% endblock banner_slider %}
-
-{% block information %}
-<div class="container">
-  <div class="row bg-success text-center p-5 text-white border-bottom shadow">
-    <h1>products</h1>
-    <small class="fs-5">Get extra 16% off (price inclusive of cashback/coupon) Problem Solving, Social Skills, Creativity & Imagination, Time Management, General Knowledge, Color & Shape Recognition</small>
-  </div>
-</div>
-{% endblock information %}
-
 {% block main-content %}
-<div class="container">
-  
-  <h1>I'm gona king of the python </h1>
-  <br><br>
-  <div class="row container">
-    <div
-      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-      date-wow-duration="1s"
-      data-wow-delay="0.6s"
-      style="
-        animation-duration: 1s;
-        animation-delay: 0.6s;
-        animation-name: none;
-      "
-    >
-      <div class="goodnesssec home_rub smbg">
-        <a href="#">
-          <div class="rubics_home1 text-center">
-            <img
-              src="{% static 'app/images/prodect/drift megaminx .jpg' %}"
-              class="img-responsive center-block"
-              alt=""
-            />
-            <p class="mlkpro">megaminx</p>
-          </div>
-        </a>
-      </div>
-    </div>
-      <div
-      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-      date-wow-duration="1s"
-      data-wow-delay="0.6s"
-      style="
-        animation-duration: 1s;
-        animation-delay: 0.6s;
-        animation-name: none;
-      "
-    >
-      <div class="goodnesssec home_rub mir">
-        <a href="#">
-          <div class="rubics_home1 text-center">
-            <img
-              src="{% static 'app/images/prodect/gan mirror m (magnetic).jpg' %}"
-              class="img-responsive center-block"
-              alt=""
-            />
-            <p class="mlkpro">mirror</p>
-          </div>
-        </a>
-      </div>
-    </div>
-      <div
-      class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-      date-wow-duration="1s"
-      data-wow-delay="0.6s"
-      style="
-        animation-duration: 1s;
-        animation-delay: 0.6s;
-        animation-name: none;
-      "
-    >
-      <div class="goodnesssec home_rub mfj">
-        <a href="#">
-          <div class="rubics_home1 text-center">
-            <img
-              src="{% static 'app/images/prodect/mfjs meilong 12x12.jpg' %}"
-              class="img-responsive center-block"
-              alt=""
-            />
-            <p class="mlkpro">mfjs</p>
-          </div>
-        </a>
-      </div>
-    </div>
-      
-    </div>
-    <br><br>
-    <div class="row container">
-      <div
-        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-        date-wow-duration="1s"
-        data-wow-delay="0.6s"
-        style="
-          animation-duration: 1s;
-          animation-delay: 0.6s;
-          animation-name: none;
-        "
-      >
-        <div class="goodnesssec home_rub smbg">
-          <a href="#">
-            <div class="rubics_home1 text-center">
-              <img
-                src="{% static 'app/images/prodect/twist 3x3 speedcube.jpg' %}"
-                class="img-responsive center-block"
-                alt=""
-              />
-              <p class="mlkpro">twist</p>
+<div class="container mt-4"> <!-- Add margin top to create space from the header -->
+  <div class="row">
+    {% for p in product %}
+    <div class="col-md-2 col-sm-3 col-4 mb-4"> <!-- Reduce the column size to make the card smaller -->
+      <div class="card product-card">
+        <div class="badge-container">
+          <span class="badge">In Stock</span>
+        </div>
+        <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a> <!-- Move the heart icon to the top right corner -->
+        <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
+        <div class="product-card-body">
+          <p class="product-brand">{{ p.brand.name }}</p>
+          <h5 class="product-name">{{ p.name }}</h5>
+          <div class="price">
+            <div class="discount-price">
+              <span class="selling-price">${{ p.price }}</span>
+              <span class="discount-tag">{{ p.discount }}% off</span>
             </div>
-          </a>
+            <span class="original-price"><del>${{ p.old_price }}</del></span>
+          </div>
+          <div class="action-buttons">
+            <a href="#" class="btn btn-primary btn-sm">Add To Cart</a> <!-- Make the buttons smaller -->
+            <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> <!-- Make the buttons smaller -->
+          </div>
         </div>
       </div>
-        <div
-        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-        date-wow-duration="1s"
-        data-wow-delay="0.6s"
-        style="
-          animation-duration: 1s;
-          animation-delay: 0.6s;
-          animation-name: none;
-        "
-      >
-        <div class="goodnesssec home_rub mir">
-          <a href="#">
-            <div class="rubics_home1 text-center">
-              <img
-                src="{% static 'app/images/prodect/sequential movement.jpg' %}"
-                class="img-responsive center-block"
-                alt=""
-              />
-              <p class="mlkpro">sequential</p>
-            </div>
-          </a>
-        </div>
-      </div>
-        <div
-        class="col-md-4 col-sm-4 mi-go wow fadeInUp"
-        date-wow-duration="1s"
-        data-wow-delay="0.6s"
-        style="
-          animation-duration: 1s;
-          animation-delay: 0.6s;
-          animation-name: none;
-        "
-      >
-        <div class="goodnesssec home_rub mfj">
-          <a href="#">
-            <div class="rubics_home1 text-center">
-              <img
-                src="{% static 'app/images/prodect/rubiks connected 3x3 (magnetic).jpg' %}"
-                class="img-responsive center-block"
-                alt=""
-              />
-              <p class="mlkpro">connected 3x3</p>
-            </div>
-          </a>
-        </div>
-      </div>
-        
-      </div>
+    </div>
+    {% endfor %}
   </div>
 </div>
-<br><br>
+<style>
+  .product-card {
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease;
+    position: relative; /* Position the heart icon */
+  }
+
+  .badge-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .badge {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .heart-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #f00; /* Set the color for the heart icon */
+  }
+
+  .product-card-body {
+    padding: 15px;
+  }
+
+  .product-brand {
+    color: #555;
+  }
+
+  .product-name {
+    font-weight: 500;
+    margin-top: 5px;
+  }
+
+  .price {
+    margin-top: 10px;
+  }
+
+  .discount-price {
+    display: flex;
+    align-items: center;
+  }
+
+  .selling-price {
+    color: #E90303;
+    font-size: 16px; /* Reduce font size for smaller cards */
+  }
+
+  .discount-tag {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 5px;
+    margin-left: 5px;
+  }
+
+  .original-price {
+    color: #aaa;
+    text-decoration: line-through;
+    margin-left: 10px;
+  }
+
+  .action-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .btn {
+    padding: 8px 16px; /* Reduce button size */
+    border-radius: 5px;
+  }
+  
+  .btn-sm {
+    padding: 6px 12px; /* Further reduce button size */
+  }
+</style>
 {% endblock main-content %}

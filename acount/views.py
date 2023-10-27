@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .utils import send_otp
 import pyotp
 from datetime import datetime
+from django.views.decorators.cache import never_cache
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from admin_sid.models import *
@@ -14,14 +15,16 @@ from admin_sid.models import *
             
 
 def home_all(request):
-    return render(request,"app/home_all.html")
+    product = Prodect.objects.all()
+    return render(request,"app/home_all.html",{'product':product})
 
+@never_cache
 def home(request):
+    product = Prodect.objects.all()
     if request.user.is_authenticated:
-        return render(request,"app/home.html")
+        return render(request,"app/home.html",{'product':product})
     else:
         return render(request,"app/home_all.html")
-
 
 
 def sign_up(request):
@@ -78,22 +81,30 @@ def otp_perform(request):
                     user = User.objects.create_user(**user_data)
                     request.session['user'] = user.email
                     login(request, user)
-                    del request.session['otp_key']
-                    del request.session['otp_valid']
-                    del request.session['user_data']
-                    del request.session['mail']
+                    clear_session(request)
                     return redirect('user_login')
                 else:
+                    clear_session(request)
                     messages.error(request, 'OTP invalid')
                     return redirect('otp')
             else:
+                clear_session(request)
                 messages.error(request, 'OTP expired')
                 return redirect('sign_up')
         else:
+            clear_session(request)
             messages.error(request, 'Didnt get any otp')
             return redirect('sign_up')
     else:
+        clear_session(request)
         return redirect('sign_up')
+
+
+def clear_session(request):
+    key = ['otp_key', 'otp_valid', 'user_data','mail']
+    for key in key:
+        if key in request.session:
+            del request.session[key]
     
 
 def user_login(request):
@@ -102,36 +113,48 @@ def user_login(request):
     
 def login_perform(request):
     if request.method == 'POST':
-        user_name = request.POST['username']
+        username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=user_name, password=password)
-        if user is not None:
-            if user.is_superuser:
-                login(request, user)
-                return redirect('admin_dsh')
+        if User.objects.filter(username=username).exists():
+            if User.objects.get(username=username).is_active:
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    if user.is_superuser:
+                        login(request, user)
+                        return redirect('admin_dsh')
+                    else:
+                        login(request, user)
+                        return redirect('home')
+                else:
+                    messages.error(request, "Username or password is incorrect")
+                    return redirect('/')
             else:
-                login(request, user)
-                return redirect('home')
+                messages.error(request, "User is Blocked")
+                return redirect('user_login')
         else:
-            messages.error(request, "Username or password is incorrect")
-            return redirect('/')
+            messages.error(request,"User doesn't exists")
+            return redirect('user_login')
+    else:
+        return redirect('user_login')
 
 
-@login_required
+@never_cache
 def home_perform(request):
     # Your view logic for the home page here
     if not request.user.is_authenticated:
         return render(request, 'app/userlogin.html')
     else:
         return render(request,'app/home_all.html')
-    
+
+@never_cache    
 def rubik_3(request):
     if request.user.is_authenticated:
         product = Prodect.objects.all()
         return render(request,'app/3x3rubiks.html',{'product':product})
     else:
         return render(request,"app/home_all.html")
-    
+
+@never_cache    
 def view_product(request,pid):
     vi_product = Prodect.objects.get(id=pid)
     return render(request,'app/view_product.html',{'vi_product':vi_product})

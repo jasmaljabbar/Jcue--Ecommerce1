@@ -15,13 +15,20 @@ def admin_dsh(request):
         return render(request,"admin/admin_dsh.html")
     else:
         return render(request,'app/home_all.html')
-
+@never_cache
 def show_category(request):
-    category = Category.objects.all()
-    return render(request,'admin/show_category.html',{'category':category})
-
+    if request.user.is_authenticated:
+        category = Category.objects.all()
+        return render(request,'admin/show_category.html',{'category':category})
+    else:
+        return render(request,'app/home_all.html')
+    
+@never_cache
 def add_category(request):
-    return render(request,'admin/add_category.html')
+    if request.user.is_authenticated:
+        return render(request,'admin/add_category.html')
+    else:
+        return render(request,'app/home_all.html')
 
 
 def add_category_action(request):
@@ -38,7 +45,7 @@ def add_category_action(request):
 
     return redirect('show_category')
 
-
+@never_cache
 def edit_category(request,cid):
     if request.user.is_authenticated:
         category = Category.objects.get(id=cid)
@@ -64,8 +71,65 @@ def dlt_category(request,cid):
     category =Category.objects.get(id=cid)
     category.delete()
     return redirect('show_category')
+
+@never_cache
+def show_brand(request):
+    if request.user.is_authenticated:
+        brand = Brand.objects.all()
+        return render(request,'admin/show_brand.html',{'brand':brand})
+    else:
+        return render(request,'app/home_all.html')
     
-   
+@never_cache
+def add_brand(request):
+    if request.user.is_authenticated:
+        return render(request,'admin/add_brand.html')
+    else:
+        return render(request,'app/home_all.html')
+
+
+def add_brand_action(request):
+    if request.method == 'POST':
+        new_brand = request.POST.get('new_brand')
+        existing_brand = Brand.objects.filter(title=new_brand)
+
+        if existing_brand.exists():
+            messages.error(request, 'Brand already exists')
+            return redirect('add_brand')
+        else:
+            brand = Brand(title=new_brand)
+            brand.save()
+    return redirect('show_brand')
+
+@never_cache
+def edit_brand(request,bid):
+    if request.user.is_authenticated:
+        brand = Brand.objects.get(id=bid)
+        return render(request,'admin/edit_brand.html', {'brand':brand})
+    else:
+        return render(request,'app/home_all.html')
+
+def edt_brand_action(request):
+    if request.method== 'POST':
+        id = request.POST.get('id')
+        name = request.POST.get('editbrand')
+        existing_brand = Brand.objects.filter(title=name)
+        if existing_brand.exists():
+            messages.error(request, 'Brand already exists')
+            return redirect('edit_brand')
+        else:
+            brand = Brand.objects.get(id=id)
+            brand.title = name
+            brand.save()
+            return redirect('show_brand')
+
+def dlt_brand(request,bid):
+    brand =Brand.objects.get(id=bid)
+    brand.delete()
+    return redirect('show_brand')
+
+
+@never_cache 
 def show_prodect(request):
     if request.user.is_authenticated:
         prodects = Prodect.objects.all()
@@ -73,7 +137,7 @@ def show_prodect(request):
     else:
         return render(request,'app/home_all.html')
     
-
+@never_cache
 def view_prodect(request,uid):
     if request.user.is_authenticated:
         prodects = Prodect.objects.get(id=uid)
@@ -82,7 +146,7 @@ def view_prodect(request,uid):
         return render(request,'app/home_all.html')
 
 
-
+@never_cache
 def edit_prodect(request, uid):
     if request.user.is_authenticated:
         product = Prodect.objects.get(id=uid)
@@ -136,6 +200,7 @@ def edit_prodect_action(request):
     else:
         return render(request,'app/home_all.html')
 
+@never_cache
 def add_prodect(request):
     if request.user.is_authenticated:
         category = Category.objects.all()
@@ -181,7 +246,7 @@ def delete_prodect(request,uid):
         return render(request,'app/home_all.html')
 
 
-
+@never_cache
 def show_user(request):
     if request.user.is_authenticated:
         users= User.objects.all().exclude(is_superuser=True)
