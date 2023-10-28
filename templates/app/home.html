@@ -20,29 +20,29 @@
 </div>
 {% endblock banner_slider %}
 {% block main-content %}
-<div class="container mt-4"> <!-- Add margin top to create space from the header -->
+<div class="container mt-4"> 
   <div class="row">
     {% for p in product %}
-    <div class="col-md-2 col-sm-3 col-4 mb-4"> <!-- Reduce the column size to make the card smaller -->
+    <div class="col-md-2 col-sm-3 col-4 mb-4"> 
       <div class="card product-card">
         <div class="badge-container">
           <span class="badge">In Stock</span>
         </div>
-        <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a> <!-- Move the heart icon to the top right corner -->
+        <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a> 
         <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
         <div class="product-card-body">
           <p class="product-brand">{{ p.brand.name }}</p>
           <h5 class="product-name">{{ p.name }}</h5>
           <div class="price">
             <div class="discount-price">
-              <span class="selling-price">${{ p.price }}</span>
+              <span class="selling-price">₹{{ p.price }}</span>
               <span class="discount-tag">{{ p.discount }}% off</span>
             </div>
-            <span class="original-price"><del>${{ p.old_price }}</del></span>
+            <span class="original-price"><del>₹{{ p.old_price }}</del></span>
           </div>
           <div class="action-buttons">
-            <a href="#" class="btn btn-primary btn-sm">Add To Cart</a> <!-- Make the buttons smaller -->
-            <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> <!-- Make the buttons smaller -->
+            <a href="#" class="btn btn-primary btn-sm">Add To Cart</a> 
+            <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> 
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     transition: all 0.2s ease;
-    position: relative; /* Position the heart icon */
+    position: relative; 
   }
 
   .badge-container {
@@ -76,7 +76,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    color: #f00; /* Set the color for the heart icon */
+    color: #f00; 
   }
 
   .product-card-body {
@@ -103,7 +103,7 @@
 
   .selling-price {
     color: #E90303;
-    font-size: 16px; /* Reduce font size for smaller cards */
+    font-size: 16px;
   }
 
   .discount-tag {
@@ -126,12 +126,12 @@
   }
 
   .btn {
-    padding: 8px 16px; /* Reduce button size */
+    padding: 8px 16px; 
     border-radius: 5px;
   }
   
   .btn-sm {
-    padding: 6px 12px; /* Further reduce button size */
+    padding: 6px 12px; 
   }
 </style>
 {% endblock main-content %}

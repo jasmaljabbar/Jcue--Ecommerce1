@@ -14,21 +14,21 @@ def admin_dsh(request):
     if request.user.is_authenticated:
         return render(request,"admin/admin_dsh.html")
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 @never_cache
 def show_category(request):
     if request.user.is_authenticated:
         category = Category.objects.all()
         return render(request,'admin/show_category.html',{'category':category})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
     
 @never_cache
 def add_category(request):
     if request.user.is_authenticated:
         return render(request,'admin/add_category.html')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 
 def add_category_action(request):
@@ -51,7 +51,7 @@ def edit_category(request,cid):
         category = Category.objects.get(id=cid)
         return render(request,'admin/edit_category.html', {'category':category})
     else:
-        return render(request,'app/home_all.html')
+        return redirect ('home')
 
 def edt_category_action(request):
     if request.method== 'POST':
@@ -78,14 +78,14 @@ def show_brand(request):
         brand = Brand.objects.all()
         return render(request,'admin/show_brand.html',{'brand':brand})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
     
 @never_cache
 def add_brand(request):
     if request.user.is_authenticated:
         return render(request,'admin/add_brand.html')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 
 def add_brand_action(request):
@@ -107,7 +107,7 @@ def edit_brand(request,bid):
         brand = Brand.objects.get(id=bid)
         return render(request,'admin/edit_brand.html', {'brand':brand})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 def edt_brand_action(request):
     if request.method== 'POST':
@@ -130,33 +130,33 @@ def dlt_brand(request,bid):
 
 
 @never_cache 
-def show_prodect(request):
+def show_product(request):
     if request.user.is_authenticated:
-        prodects = Prodect.objects.all()
-        return render(request,'admin/show_prodect.html',{'prodects':prodects})
+        products = Product.objects.all()
+        return render(request,'admin/show_product.html',{'products':products})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
     
 @never_cache
-def view_prodect(request,uid):
+def view_product(request,uid):
     if request.user.is_authenticated:
-        prodects = Prodect.objects.get(id=uid)
-        return render(request, 'admin/view_prodects.html',{'prodects':prodects})
+        products = Product.objects.get(id=uid)
+        return render(request, 'admin/view_products.html',{'products':products})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 
 @never_cache
-def edit_prodect(request, uid):
+def edit_product(request, uid):
     if request.user.is_authenticated:
-        product = Prodect.objects.get(id=uid)
+        product = Product.objects.get(id=uid)
         category = Category.objects.all()
         brand = Brand.objects.all()
-        return render(request,'admin/edit_prodect.html', {'product': product, 'category': category, 'brand':brand})
+        return render(request,'admin/edit_product.html', {'product': product, 'category': category, 'brand':brand})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
-def edit_prodect_action(request):
+def edit_product_action(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             id = request.POST.get('id')
@@ -173,7 +173,7 @@ def edit_prodect_action(request):
             img4 = request.FILES.get('img4')
 
 
-            product = Prodect.objects.get(id=id)
+            product = Product.objects.get(id=id)
 
             product.name = name
             product.description = description
@@ -194,14 +194,14 @@ def edit_prodect_action(request):
 
             # Save the updated product
             product.save()
-            return redirect('show_prodect')
+            return redirect('show_product')
         else:
-            return redirect('show_prodect')
+            return redirect('show_product')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 @never_cache
-def add_prodect(request):
+def add_product(request):
     if request.user.is_authenticated:
         category = Category.objects.all()
         brand = Brand.objects.all()
@@ -209,11 +209,11 @@ def add_prodect(request):
             'category':category,
             'brand':brand
         }
-        return render(request,'admin/add_prodect.html',context)
+        return render(request,'admin/add_product.html',context)
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
-def add_prodect_action(request):
+def add_product_action(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             name = request.POST.get('name')
@@ -227,23 +227,32 @@ def add_prodect_action(request):
             img2 = request.FILES.get('img2')
             img3 = request.FILES.get('img3')
             img4 = request.FILES.get('img4')
-            product = Prodect(title=name,brand_id=brand,category_id=category,price=price,old_price =old_price, stock=stock,description=description,image1=img1,image2=img2,image3=img3,image4=img4)
+            product = Product(title=name,brand_id=brand,category_id=category,price=price,old_price =old_price, stock=stock,description=description,image1=img1,image2=img2,image3=img3,image4=img4)
             product.save()
-            return redirect('show_prodect')
+            return redirect('show_product')
         else:
-            return redirect('show_prodect')
+            return redirect('show_product')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 
 
-def delete_prodect(request,uid):
+def delete_product(request,uid):
     if request.user.is_authenticated:
-        prodect = Prodect.objects.get(id=uid)
-        prodect.delete()
-        return redirect ('show_prodect')
+        product = Product.objects.get(id=uid)
+        product.delete()
+        return redirect ('show_product')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
+
+# def block_product(request, uid):
+#     product = Product.objects.get(id=uid)
+#     if product.active:
+#         product.active = False
+#     else:
+#         product.active = True
+#     product.save()
+#     return redirect('admproduct')
 
 
 @never_cache
@@ -252,7 +261,7 @@ def show_user(request):
         users= User.objects.all().exclude(is_superuser=True)
         return render(request,'admin/show_user.html',{'users':users})
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 
 
@@ -268,7 +277,7 @@ def customeraction(request, uid):
         customer.save()
         return redirect('show_user')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
     
 
 

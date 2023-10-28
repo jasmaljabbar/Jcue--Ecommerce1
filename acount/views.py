@@ -14,19 +14,13 @@ from admin_sid.models import *
 
             
 
-def home_all(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    product = Prodect.objects.all()
-    return render(request,"app/home_all.html",{'product':product})
+
 
 @never_cache
 def home(request):
-    product = Prodect.objects.all()
-    if request.user.is_authenticated:
-        return render(request,"app/home.html",{'product':product})
-    else:
-        return render(request,"app/home_all.html")
+    product = Product.objects.all()
+    return render(request,"app/home.html",{'product':product})
+
 
 
 def sign_up(request):
@@ -77,6 +71,7 @@ def otp_perform(request):
         otp_valid = request.session.get('otp_valid')
         if otp_key and otp_valid is not None:
             valid_otp = datetime.fromisoformat(otp_valid)
+            print(otp_valid)
             if valid_otp > datetime.now():
                 totp = pyotp.TOTP(otp_key, interval=60)
                 if totp.verify(otp):
@@ -86,7 +81,6 @@ def otp_perform(request):
                     clear_session(request)
                     return redirect('user_login')
                 else:
-                    clear_session(request)
                     messages.error(request, 'OTP invalid')
                     return redirect('otp')
             else:
@@ -129,7 +123,7 @@ def login_perform(request):
                         return redirect('home')
                 else:
                     messages.error(request, "Username or password is incorrect")
-                    return redirect('/')
+                    return redirect('home')
             else:
                 messages.error(request, "User is Blocked")
                 return redirect('user_login')
@@ -146,26 +140,24 @@ def home_perform(request):
     if not request.user.is_authenticated:
         return render(request, 'app/userlogin.html')
     else:
-        return render(request,'app/home_all.html')
+        return redirect('home')
 
 @never_cache    
 def rubik_3(request):
-    if request.user.is_authenticated:
-        product = Prodect.objects.all()
-        return render(request,'app/3x3rubiks.html',{'product':product})
-    else:
-        return render(request,"app/home_all.html")
+    product = Product.objects.all()
+    return render(request,'app/3x3rubiks.html',{'product':product})
+   
 
 @never_cache    
 def view_product(request,pid):
-    vi_product = Prodect.objects.get(id=pid)
+    vi_product = Product.objects.get(id=pid)
     return render(request,'app/view_product.html',{'vi_product':vi_product})
     
 
 def log_out(request):
     request.session.flush() 
     logout(request)
-    return redirect('/')
+    return redirect('home')
 
 
 
