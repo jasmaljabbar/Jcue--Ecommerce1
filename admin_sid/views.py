@@ -67,10 +67,7 @@ def edt_category_action(request):
             category.save()
             return redirect('show_category')
     
-def dlt_category(request,cid):
-    category =Category.objects.get(id=cid)
-    category.delete()
-    return redirect('show_category')
+
 
 @never_cache
 def show_brand(request):
@@ -123,10 +120,7 @@ def edt_brand_action(request):
             brand.save()
             return redirect('show_brand')
 
-def dlt_brand(request,bid):
-    brand =Brand.objects.get(id=bid)
-    brand.delete()
-    return redirect('show_brand')
+
 
 
 @never_cache 
@@ -138,7 +132,7 @@ def show_product(request):
         return redirect('home')
     
 @never_cache
-def view_product(request,uid):
+def admin_view_product(request,uid):
     if request.user.is_authenticated:
         products = Product.objects.get(id=uid)
         return render(request, 'admin/view_products.html',{'products':products})
@@ -237,13 +231,7 @@ def add_product_action(request):
 
 
 
-def delete_product(request,uid):
-    if request.user.is_authenticated:
-        product = Product.objects.get(id=uid)
-        product.delete()
-        return redirect ('show_product')
-    else:
-        return redirect('home')
+
 
 # def block_product(request, uid):
 #     product = Product.objects.get(id=uid)
@@ -268,7 +256,6 @@ def show_user(request):
 def customeraction(request, uid):
     if request.user.is_authenticated:
         customer = User.objects.get(id=uid)
-        print(customer.get_full_name)
         if customer.is_active:
             customer.is_active = False
             print(customer.is_active)
@@ -278,6 +265,35 @@ def customeraction(request, uid):
         return redirect('show_user')
     else:
         return redirect('home')
+    
+def product_action(request, uid):
+    product = Product.objects.get(id=uid)
+    if product.active:
+        product.active = False
+    else:
+        product.active = True
+    product.save()
+    return redirect('show_product')
+
+
+def category_action(request, cid):
+    category = Category.objects.get(id=cid)
+    if category.active:
+        category.active = False
+    else:
+        category.active = True
+    category.save()
+    return redirect('show_category')
+
+
+def brand_action(request, bid):
+    brand = Brand.objects.get(id=bid)
+    if brand.active:
+        brand.active = False
+    else:
+        brand.active = True
+    brand.save()
+    return redirect('show_brand')
     
 
 

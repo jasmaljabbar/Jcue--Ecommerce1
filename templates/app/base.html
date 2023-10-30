@@ -51,12 +51,11 @@
                 products
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'rubik_3' %}">3x3_RUBIKS</a></li>
-                <li><a class="dropdown-item" href="#">4x4_RUBIKS</a></li>
-                <li><a class="dropdown-item" href="#">5x5_RUBIKS</a></li>
-                <li><a class="dropdown-item" href="#">BIG_CUBES</a></li>
-                <li><a class="dropdown-item" href="#">MEGAMINX</a></li>
-                <li><a class="dropdown-item" href="#">PYRAMINX</a></li>
+                {% for cat in cats %}
+                  
+                  <li><a class="dropdown-item" href="#">{{cat.title}}</a></li>
+                
+                {% endfor %}
                 
               </ul>
             </li>

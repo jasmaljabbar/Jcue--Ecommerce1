@@ -3,6 +3,7 @@
 {% block title %}
   Home
 {% endblock title %} 
+
 {% block banner_slider %}
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
@@ -20,36 +21,40 @@
 </div>
 {% endblock banner_slider %}
 {% block main-content %}
-<div class="container mt-4"> 
-  <div class="row">
-    {% for p in product %}
-    <div class="col-md-2 col-sm-3 col-4 mb-4"> 
-      <div class="card product-card">
-        <div class="badge-container">
-          <span class="badge">In Stock</span>
-        </div>
-        <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a> 
-        <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
-        <div class="product-card-body">
-          <p class="product-brand">{{ p.brand.name }}</p>
-          <h5 class="product-name">{{ p.name }}</h5>
-          <div class="price">
-            <div class="discount-price">
-              <span class="selling-price">₹{{ p.price }}</span>
-              <span class="discount-tag">{{ p.discount }}% off</span>
+
+  
+    <div class="container mt-4"> 
+      <div class="row">
+        {% for p in product %}
+          {% if p.active %}
+        <div class="col-md-2 col-sm-3 col-4 mb-4"> 
+          <div class="card product-card">
+            <div class="badge-container">
+              <span class="badge">In Stock</span>
             </div>
-            <span class="original-price"><del>₹{{ p.old_price }}</del></span>
-          </div>
-          <div class="action-buttons">
-            <a href="#" class="btn btn-primary btn-sm">Add To Cart</a> 
-            <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> 
+            <a href="#" class="heart-icon"><i class="fa fa-heart"></i></a> 
+            <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
+            <div class="product-card-body">
+              <p class="product-brand">{{ p.brand.name }}</p>
+              <h5 class="product-name">{{ p.name }}</h5>
+              <div class="price">
+                <div class="discount-price">
+                  <span class="selling-price">₹{{ p.price }}</span>
+                  <span class="discount-tag">{{ p.discount }}% off</span>
+                </div>
+                <span class="original-price"><del>₹{{ p.old_price }}</del></span>
+              </div>
+              <div class="action-buttons">
+                <a href="{% url 'view_cart' %}" class="btn btn-primary btn-sm">Add To Cart</a> 
+                <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> 
+              </div>
+            </div>
           </div>
         </div>
+        {% endif %}
+        {% endfor %}
       </div>
     </div>
-    {% endfor %}
-  </div>
-</div>
 <style>
   .product-card {
     border: 1px solid #e1e1e1;
@@ -58,7 +63,7 @@
     transition: all 0.2s ease;
     position: relative; 
   }
-
+  
   .badge-container {
     position: absolute;
     top: 10px;

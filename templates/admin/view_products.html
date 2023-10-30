@@ -53,7 +53,13 @@
 
                 </table>
                 <a href="{% url 'edit_product' products.id  %}", class="btn btn-primary">Edit</a>
-                <a href="{% url 'delete_product' products.id %}", class="btn btn-danger">Delete</a>
+                <td>
+                    {% if products.active %}
+                        <a href="{% url 'product_action' products.id %}" class="btn btn-success"> Available</a>
+                    {% else %}
+                        <a href="{% url 'product_action' products.id %}" class="btn btn-danger">Not Available</a>
+                    {% endif %}
+                </td>
             </div>
         </div>
     </div>

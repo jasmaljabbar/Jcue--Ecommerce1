@@ -15,12 +15,14 @@ from admin_sid.models import *
             
 
 
+def base(request):
+    cats = Category.objects.all()
+    return render(request, "app/base.html",{'cats': cats})
 
 @never_cache
 def home(request):
     product = Product.objects.all()
     return render(request,"app/home.html",{'product':product})
-
 
 
 def sign_up(request):
@@ -142,16 +144,22 @@ def home_perform(request):
     else:
         return redirect('home')
 
+
+
 @never_cache    
-def rubik_3(request):
-    product = Product.objects.all()
+def category_search(request, uid):
+    product = Product.objects.get(id=uid)
     return render(request,'app/3x3rubiks.html',{'product':product})
+
    
 
 @never_cache    
 def view_product(request,pid):
     vi_product = Product.objects.get(id=pid)
     return render(request,'app/view_product.html',{'vi_product':vi_product})
+
+def view_cart(request):
+    return render(request,'app/cart.html')
     
 
 def log_out(request):

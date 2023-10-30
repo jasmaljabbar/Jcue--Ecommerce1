@@ -3,8 +3,7 @@
 {% block title %}
   Home
 {% endblock title %} 
-{% block main-content %}
-
+{% block main-content %}  
 <div class="container-fluid">
     <div class="row d-flex justify-content-center p-5">
         <div class="col-lg-6 col-12">
@@ -51,9 +50,9 @@
                     <td>Availability</td>
                     <th class="text-capitalize">
                         {% if vi_product.stock > 0 %}
-                            <span class="text-success">Available</span>
+                        <span class="text-success">Available</span>
                         {% else %}
-                            <span class="text-danger">Out of Stock</span>
+                        <span class="text-danger">Out of Stock</span>
                         {% endif %}
                     </th>
                 </tr>
@@ -75,5 +74,6 @@
         });
     });
 </script>
+
 
 {% endblock %}

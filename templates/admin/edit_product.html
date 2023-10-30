@@ -24,7 +24,9 @@
                                 <select name="category" class="form-control">
                                     <option value="{{ product.category_id }}">{{ product.category }}</option>
                                 {% for cat in category %}
-                                    <option value="{{ cat.id }}">{{ cat.title }}</option>
+                                {% if cat.active %}
+                                <option value="{{ cat.id }}">{{ cat.title }}</option>
+                                {% endif %}
                                 {% endfor %}
                                 </select>
                             </td>   
@@ -34,7 +36,9 @@
                             <td>
                                 <select name="brand" class="form-control">
                                 {% for brd in brand %}
-                                    <option value="{{ brd.id }}">{{ brd.title }}</option>
+                                        {% if brd.active %} 
+                                        <option value="{{ brd.id }}">{{ brd.title }}</option>
+                                        {% endif %}
                                 {% endfor %}
                                 </select>
                             </td>

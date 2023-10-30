@@ -1,0 +1,115 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %}
+  Home
+{% endblock title %} 
+{% block main-content %}
+<style>
+    .content-box {
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 30%;
+    }
+
+    .item {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid #e1e8ee;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .item img {
+        max-width: 100px;
+        height: auto;
+    }
+
+    .quantity input {
+        width: 40px;
+        text-align: center;
+    }
+
+    .subtotal {
+        font-weight: bold;
+    }
+
+    .table th {
+        text-align: left;
+        padding: 8px;
+    }
+
+    .table td {
+        padding: 8px;
+    }
+</style>
+</head>
+<body>
+<header class="text-center py-4">
+    <h1>Your Shopping Cart</h1>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="cart">
+                <div class="cart-item">
+                    <!-- Product 1 details -->
+                    <div class="container">
+                        <div class="item">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="https://designmodo.com/demo/shopping-cart/item-2.png" alt="Product Image">
+                                            <h6>Maison Margiela Future Sneakers</h6>
+                                            <p>Color: White</p>
+                                        </td>
+                                        <td>
+                                            ₹655
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <button class="btn btn-secondary minus-btn" type="button">-</button>
+                                                <input type="text" name="name" value="1" class="form-control text-center">
+                                                <button class="btn btn-secondary plus-btn" type="button">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="total-price">$870</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart-item">
+                    <!-- Product 2 details -->
+                </div>
+                <!-- Add more cart items as needed -->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-box">
+                <h2>Cart Summary</h2>
+                <p>Subtotal: $69.97</p>
+                <p>Shipping: Free</p>
+                <p>Total: $69.97</p>
+                <button class="btn btn-primary checkout">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

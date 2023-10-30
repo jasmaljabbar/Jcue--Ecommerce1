@@ -4,12 +4,14 @@ from django.db import models
 
 class Category (models.Model):
     title = models.CharField(max_length=100)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
 class Brand (models.Model):
     title = models.CharField(max_length=100)
+    active = models.BooleanField(default=True)
     
     def __str__(self):
         return self.title
@@ -22,6 +24,7 @@ class Product (models.Model):
     image2 = models.ImageField(upload_to='prodents')
     image3 = models.ImageField(upload_to='prodents')
     image4 = models.ImageField(upload_to='prodents')
+    active = models.BooleanField(default=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=99999,decimal_places=2)
     old_price = models.DecimalField(max_digits=99999,decimal_places=2)

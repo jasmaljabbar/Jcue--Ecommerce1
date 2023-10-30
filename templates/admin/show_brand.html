@@ -56,7 +56,11 @@
                         <a href="{% url 'edit_brand' brd.id %}" class="btn btn-success">Edit</a>
                     </td>
                     <td>
-                        <a href="{% url 'dlt_brand' brd.id %}" class="btn btn-danger">Delete</a>
+                        {% if brd.active %}
+                            <a href="{% url 'brand_action' brd.id %}" class="btn btn-success"> Available</a>
+                        {% else %}
+                            <a href="{% url 'brand_action' brd.id %}" class="btn btn-danger">Not Available</a>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>
