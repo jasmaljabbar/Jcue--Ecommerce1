@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .utils import send_otp
 import pyotp
+from django.db.models import Q
 from datetime import datetime
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import login, logout, authenticate
@@ -10,14 +11,6 @@ from django.contrib.auth.decorators import login_required
 from admin_sid.models import *
 
 # Create your views here.
-
-
-            
-
-
-def base(request):
-    cats = Category.objects.all()
-    return render(request, "app/base.html",{'cats': cats})
 
 @never_cache
 def home(request):
@@ -148,8 +141,17 @@ def home_perform(request):
 
 @never_cache    
 def category_search(request, uid):
-    product = Product.objects.get(id=uid)
-    return render(request,'app/3x3rubiks.html',{'product':product})
+    product = Product.objects.filter(category = uid)
+    return render(request,'app/category_page.html',{'product':product})
+
+
+def search(request):
+    query = request.GET.get('query')
+    if query:
+        product = Product.objects.filter(Q(title__icontains=query) |Q(description__icontains=query)).exclude(active=False)
+        return render(request,'app/category_page.html',{'product':product})
+
+
 
    
 
@@ -158,8 +160,7 @@ def view_product(request,pid):
     vi_product = Product.objects.get(id=pid)
     return render(request,'app/view_product.html',{'vi_product':vi_product})
 
-def view_cart(request):
-    return render(request,'app/cart.html')
+
     
 
 def log_out(request):

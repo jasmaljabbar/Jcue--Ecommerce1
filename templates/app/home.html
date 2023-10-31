@@ -45,7 +45,11 @@
                 <span class="original-price"><del>₹{{ p.old_price }}</del></span>
               </div>
               <div class="action-buttons">
-                <a href="{% url 'view_cart' %}" class="btn btn-primary btn-sm">Add To Cart</a> 
+                <a href="{% url 'add_cart' %}" class="btn btn-primary btn-sm"
+                hx-get="{% url 'cart'%}}"
+                hx-target="#menu-cart-button"
+                hx-swap="outerHTML"
+                >Add To Cart</a> 
                 <a href="{% url 'view_product' p.id %}" class="btn btn-success btn-sm">View</a> 
               </div>
             </div>

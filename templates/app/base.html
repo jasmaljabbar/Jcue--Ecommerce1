@@ -51,10 +51,8 @@
                 products
               </a>
               <ul class="dropdown-menu">
-                {% for cat in cats %}
-                  
-                  <li><a class="dropdown-item" href="#">{{cat.title}}</a></li>
-                
+                {% for cat in cat %}
+                  <li><a class="dropdown-item" href="{% url 'category_search' cat.id %}">{{cat.title}}</a></li>
                 {% endfor %}
                 
               </ul>
@@ -65,15 +63,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success mx-2" type="submit">Search</button>
+    <form class="d-flex" method="get" action="{% url 'search' %}">
+      <input class="form-control me-2" name="query" type="search" placeholder="Search" aria-label="Search">
+      <input class="btn btn-outline-success mx-2" type="submit" value="Search">
     </form>
       <!-- ... (previous code) ... -->
       <div>
-          <a class="navbar-brand" href="#">
-              <i class="fa-solid fa-cart-shopping"></i>
-          </a>
+          {% include "cart/menu_cart.html" %}
+          
           <a class="navbar-brand" href="#">
               <i class="fa-regular fa-heart"></i>
           </a>
@@ -124,5 +121,6 @@
     <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'app/js/myscript.js' %}"></script>
     <script src="{% static 'app/js/all.min.js' %}"></script>
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
   </body>
 </html>
