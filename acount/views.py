@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
+
+from acount.models import User_profile
 from .utils import send_otp
 import pyotp
 from django.db.models import Q
@@ -19,7 +21,10 @@ def home(request):
 
 
 def sign_up(request):
-    return render(request, 'app/usersignup.html')
+    if request.user.is_authenticated :
+        return redirect('home') 
+    else:
+        return render(request, 'app/usersignup.html')
 
 
 def signup_perform(request):
@@ -55,7 +60,10 @@ def signup_perform(request):
 
 
 def otp(request):
-    return render(request, 'app/otp.html')
+    if request.user.is_authenticated :
+        return redirect('home')
+    else:
+        return render(request, 'app/otp.html')
 
 
 def otp_perform(request):
@@ -99,7 +107,10 @@ def clear_session(request):
     
 
 def user_login(request):
-    return render(request,'app/userlogin.html')
+    if request.user.is_authenticated :
+        return redirect('home')
+    else:
+        return render(request,'app/userlogin.html')
 
     
 def login_perform(request):
@@ -160,8 +171,51 @@ def view_product(request,pid):
     vi_product = Product.objects.get(id=pid)
     return render(request,'app/view_product.html',{'vi_product':vi_product})
 
+@login_required
+def userprofile(request):
+    try:
+        user_profile = User_profile.objects.get(user=request.user)
+    except User_profile.DoesNotExist:
+        user_profile = None
 
-    
+    return render(request, 'app/user_profile.html', {'user_profile': user_profile})
+
+
+@login_required
+def edit_profile(request):
+    try:
+        user_profile = User_profile.objects.get(user=request.user)
+    except User_profile.DoesNotExist:
+        user_profile = User_profile.objects.create(user=request.user)
+
+    return render(request, 'app/edit_profile.html', {'user_profile': user_profile})
+
+@login_required
+def edit_profileaction(request):
+    user_profile = User_profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        user = request.user
+        profile_photo = request.FILES.get('photo')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
+        # Check if a new profile photo is provided
+        if profile_photo:
+            user_profile.profil_photo = profile_photo  # Update the photo only if a new one is provided
+
+        user_profile.phone_number = phone_number
+        user_profile.address = address
+
+        user.username = username
+        user.email = email
+        user.save()
+
+        user_profile.save()
+
+        return redirect('userprofile')  
+
+    return redirect('edit_profile')
 
 def log_out(request):
     request.session.flush() 

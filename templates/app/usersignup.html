@@ -117,7 +117,7 @@
   <script src="{% static 'app/js/myscript.js' %}"></script>
   <script src="{% static 'app/js/all.min.js' %}"></script>
   <script>
-    var noSpacesRegex = /^\S*$/;
+    var noSpacesRegex = /^\S+$/;  // Updated regex to require a non-empty value
     var passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}/;
     
     function displayError(inputId, errorMessage) {
@@ -132,8 +132,8 @@
     
     document.getElementById('name').addEventListener('blur', function () {
         var firstName = this.value;
-        if (firstName.trim() === '' || /\d/.test(firstName) || /^ | $/.test(firstName)) {
-            displayError('name', 'Invalid name.');
+        if (!noSpacesRegex.test(firstName)) {
+            displayError('name', 'Name is required.');
         } else {
             clearError('name');
         }
@@ -162,7 +162,7 @@
         var hasErrors = false;
     
         if (!noSpacesRegex.test(this.name.value)) {
-            displayError('name', 'Name should not contain spaces.');
+            displayError('name', 'Name is required.');
             hasErrors = true;
         }
     
@@ -180,6 +180,8 @@
             event.preventDefault();
         }
     });
-  </script>
+</script>
+
+
   </body>
 </html>

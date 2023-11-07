@@ -58,7 +58,8 @@
                 </tr>
             </table>
             <div class="my-5">
-                <a href="" class="btn btn-warning mx-2 px-2">Add to Cart</a>
+                <button type="button" id="add-button" value="{{vi_product.id}}" class="btn btn-success fw500">Add to
+                    Cart</button>
                 <a href="" class="btn btn-primary mx-2 px-2">Buy Now</a>
             </div>
         </div>
@@ -73,6 +74,23 @@
             $(".selected-image").attr("src", newImageSrc);
         });
     });
+    $(document).on('click', '#add-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '{% url "basket:basket_add" %}',
+          data: {
+            productid: $('#add-button').val(),
+            productqty: 1,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            document.getElementById("basket-qty").innerHTML = json.qty
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+      })
 </script>
 
 

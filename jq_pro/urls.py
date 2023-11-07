@@ -24,6 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("acount.urls")),
     path('admin_sid/', include('admin_sid.urls')),
-    path('cart/', include('cart.urls')),
+    path('basket', include('basket.urls',namespace='basket')),
 ]
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

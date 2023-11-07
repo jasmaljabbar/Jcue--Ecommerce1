@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 SESSION_COOKIE_AGE = 86400
 
-CART_SESSION_ID = 'cart'
+
+
 
 
 # Application definition
@@ -44,8 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'acount.apps.AcountConfig',
     'admin_sid.apps.AdminSidConfig',
-    'cart.apps.CartConfig',
+    'basket.apps.BasketConfig',
+
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +74,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'acount.context_processor.categories',
-                'cart.context_processors.cart'
+                'basket.context_processors.basket',
+              
             ],
         },
     },
@@ -122,6 +126,10 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -134,6 +142,8 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 LOGIN_REDIRECT_URL = '/profile'
 
+#Basket session ID
+BASKET_SESSION_ID = 'basket'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

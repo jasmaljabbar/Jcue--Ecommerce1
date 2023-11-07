@@ -1,0 +1,65 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block title %}
+  User Profile
+{% endblock title %}
+
+{% block main-content %}
+
+  <div class="container">
+    <h1 class="h5">User Profile</h1>
+
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <div class="card">
+          {% if request.user.userprofile.profil_photo %}
+          <img src="{{ request.user.userprofile.profil_photo.url }}" class="card-img-top" alt="{{ request.user.username }}">
+            
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <p><strong>Name:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ request.user.userprofile.phone_number }}</p>
+            <p><strong>Address:</strong> {{ request.user.userprofile.address }}</p>
+            
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Order History</h5>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Order Number</th>
+                  <th>Date</th>
+                  <th>Total Amount</th>
+                  <!-- Add more table headers as needed -->
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in user_orders %}
+                  <tr>
+                    <td><a href="{% url 'order_detail' order.id %}">#{{ order.id }}</a></td>
+                    <td>{{ order.date }}</td>
+                    <td>₹{{ order.total_amount }}</td>
+                    <!-- Add more order details as needed -->
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="3">No orders yet.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main-content %}
