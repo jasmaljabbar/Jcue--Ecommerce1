@@ -33,6 +33,18 @@ class Basket():
 
         self.save()
 
+    def get_productquantity(self, product, qty):
+        """
+        Return cart item quantity
+        """
+        print("wuantiyt"+qty)
+        if qty is None:
+            return float(1)
+            
+        if product in self.basket:
+            return float(qty)
+
+
     def __iter__(self):
         """
         Collect the product_id in the session data to query the database
@@ -69,7 +81,7 @@ class Basket():
         return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
 
     def get_total_price(self):
-
+    
         subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
 
         if subtotal == 0:
@@ -85,6 +97,7 @@ class Basket():
         Delete item from session data
         """
         product_id = str(product)
+  
 
         if product_id in self.basket:
             del self.basket[product_id]
