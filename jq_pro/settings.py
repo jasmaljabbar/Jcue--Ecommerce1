@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'acount.apps.AcountConfig',
     'admin_sid.apps.AdminSidConfig',
     'basket.apps.BasketConfig',
+    'payment.apps.PaymentConfig',
+    'orders.apps.OrdersConfig',
 
 ]
 

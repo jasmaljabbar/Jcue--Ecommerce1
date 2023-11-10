@@ -13,8 +13,9 @@
       <div class="col-md-4">
         <div class="card">
             {% if request.user.userprofile.profil_photo %}
-            <img src="{{ user_profile.profil_photo.url }}" class="card-img-top" alt="{{ user.username }}">
-              
+            <div class="d-flex justify-content-center">
+                <img src="{{ user_profile.profil_photo.url }}"class="rounded-circle card-img-top my-2" style="width: 200px; height: 200px; object-fit: cover;" alt="{{ user.username }}">
+            </div>
             {% endif %}
           <div class="card-body">
             <h5 class="card-title">User Information</h5>
