@@ -91,6 +91,10 @@ class Basket():
 
         total = subtotal + Decimal(shipping)
         return total
+    def shipping_price(self):
+        if self.__len__() != 0:
+            return (Decimal(11.50))
+        return (Decimal(0))
 
     def delete(self, product):
         """

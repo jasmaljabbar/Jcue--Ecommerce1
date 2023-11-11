@@ -19,9 +19,15 @@ def order_placed(request):
 def address(request):
     try:
         billing_address = Address.objects.filter(user=request.user)
-
     except billing_address.DoesNotExist:
         return render(request,'payment/home.html')  # Redirect to the login page
+    
+    if request.method == 'POST':
+        basket = Basket(request)
+        paymentmethod = request.POST.get('paymentMethod')
+        if paymentmethod == 'cod':
+            basket.clear()
+            return render(request,'payment/orderplaced.html')
 
     return render(request, 'payment/address.html', {'billing_address': billing_address})
 
