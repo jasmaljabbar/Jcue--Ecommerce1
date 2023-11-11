@@ -57,10 +57,12 @@
                     </th>
                 </tr>
             </table>
+            {% if vi_product.stock > 0 %}
             <div class="my-5">
                 <button type="button" id="add-button" value="{{vi_product.id}}" class="btn btn-success fw500">Add to
                     Cart</button>
                 <a href="" class="btn btn-primary mx-2 px-2">Buy Now</a>
+                {% endif %}
             </div>
         </div>
     </div>

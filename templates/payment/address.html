@@ -15,7 +15,7 @@
           {% for address in billing_address %}
             <div class="card d-flex justify-content-between align-items-center" style="width: 18rem; margin-bottom: 10px;">
               <div>
-                <input type="radio" name="selected_address" value="{{ address.id }}">
+
                 <p><strong>Customer Name:</strong> {{ address.full_name }}</p>
                 <p><strong>Email:</strong> {{ address.user.email }}</p>
                 <p><strong>Address:</strong> {{ address.address1 }}</p>
@@ -31,10 +31,18 @@
                 &nbsp;
                 <!-- Delete button -->
                 <a href="{% url 'payment:delete_address' address.id %}" class="btn btn-danger btn-sm">Delete</a>
+                &nbsp;
+                {% if not address.flag  %}
+                  
+                <a href="{% url 'payment:address_active' address.id  %}" class="btn btn-primary btn-sm">Make active</a>
+                {% else %}
+                <p>Active</p>
+                {% endif %}
               </div>
               <br>
             </div>
           {% endfor %}
+          <a href="{% url 'payment:add_address' %}" class="btn btn-success btn-sm">Add Address</a>
         </div>
       </div>
 

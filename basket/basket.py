@@ -90,7 +90,7 @@ class Basket():
             shipping = Decimal(11.50)
 
         total = subtotal + Decimal(shipping)
-        return total
+        return round(total, 2)
     def shipping_price(self):
         if self.__len__() != 0:
             return (Decimal(11.50))

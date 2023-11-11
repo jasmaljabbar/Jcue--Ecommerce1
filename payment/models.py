@@ -9,7 +9,9 @@ class Address(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
     post_code = models.CharField(max_length=20, null=True, blank=True)
+    flag = models.BooleanField(default=False)
 
+    
     class Meta:
         verbose_name_plural = "Addresses"
 
