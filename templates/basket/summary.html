@@ -166,15 +166,27 @@
                 success: function (json) {
                     window.location.reload();
                     console.log(json);
-                    document.getElementById('basket-qty').innerHTML = json.qty
-                    document.getElementById('subtotal').innerHTML = json.subtotal
-                    document.getElementById('cart-total').innerHTML = json.total
-                    document.getElementById('total').innerHTML = json.total
-                    document.getElementById('productquantity').innerHTML = json.productquantity
+                    if(json.qty <=json.productStock )
+                    {
+                      document.getElementById('basket-qty').innerHTML = json.qty
+                      document.getElementById('subtotal').innerHTML = json.subtotal
+                      document.getElementById('cart-total').innerHTML = json.total
+                      document.getElementById('total').innerHTML = json.total
+                      document.getElementById('productquantity').innerHTML = json.productquantity
+                    }
+                    else
+                    {
+                        alert('no mutch stock!');
+
+                    }
 
                 },
                 
-                error: function (xhr, errmsg, err) { }
+                error: function (xhr, errmsg, err) { 
+                  window.location.reload();
+                  alert('no mutch stock!');
+
+                }
             });
         } else {
             alert('Quantity must be between 1 and 100');

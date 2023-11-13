@@ -28,19 +28,24 @@ def generate_order_key():
 
 @login_required
 def address(request):
-    
     billing_address = get_object_or_404(Address, user=request.user, flag=True)
+    
     if request.method == 'POST':
         basket = Basket(request)
         
- 
         if billing_address:
             paymentmethod = request.POST.get('paymentMethod')
-            total_paid=basket.get_total_price()
-            order_key=generate_order_key()
-        
+            total_paid = basket.get_total_price()
+            order_key = generate_order_key()
+            
+            for item in basket:
+                product = item['product']
+                if item['qty'] > product.stock:
+                    basket.clear()
+                    billing_address = Address.objects.filter(user=request.user)
+                    return render(request, 'payment/address.html', {'message': f"Insufficient stock for {product.title}",'billing_address':billing_address})
+            
             if paymentmethod == 'cod':
-
                 order = Order.objects.create(
                     user=request.user,
                     full_name=billing_address.full_name,
@@ -56,7 +61,6 @@ def address(request):
               
                 order_id = order.pk
 
-   
                 for item in basket:
                     OrderItem.objects.create(
                         order=order,
@@ -71,8 +75,10 @@ def address(request):
                 basket.clear()
 
                 return render(request, 'payment/orderplaced.html')
+    
     billing_address = Address.objects.filter(user=request.user)
-    return render(request, 'payment/address.html',{'billing_address':billing_address})
+    return render(request, 'payment/address.html', {'billing_address': billing_address})
+
 
 
 def address_active(request,aid):
