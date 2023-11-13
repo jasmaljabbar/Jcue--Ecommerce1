@@ -106,7 +106,7 @@
                 <ul class="dropdown-menu">
                   {% if request.user.is_authenticated %}
                     <li><a class="dropdown-item" href="{% url 'userprofile' %}">My Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Orders</a></li>
+                    <li><a class="dropdown-item" href="{% url 'payment:oreder_view' %}">Orders</a></li>
                     <li><a class="dropdown-item" href="#">Wishlist</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{% url 'log_out' %}">Logout</a></li>

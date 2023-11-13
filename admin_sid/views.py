@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+
+from orders.models import Order, OrderItem
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -172,8 +174,21 @@ def edit_product_action(request):
             product.name = name
             product.description = description
             product.stock = stock
-            product.price = price1
-            product.old_price = price2
+            try:
+                price_float = float(price1)
+                if price_float >= 0:
+                    product.price = price_float
+            except ValueError:
+                # Handle invalid input for price1
+                pass
+
+            try:
+                old_price_float = float(price2)
+                if old_price_float >= 0:
+                    product.old_price = old_price_float
+            except ValueError:
+                # Handle invalid input for price2
+                pass
             product.category_id = category
             product.brand_id = brand
 
@@ -294,6 +309,14 @@ def brand_action(request, bid):
         brand.active = True
     brand.save()
     return redirect('show_brand')
+
+def order(request):
+
     
+    orders= OrderItem.objects.all()
+    
+    
+    return render(request, 'admin/admin_order.html', {'orders': orders})
+
 
 

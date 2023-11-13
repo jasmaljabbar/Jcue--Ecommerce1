@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
-
 from admin_sid.models import Product
 
 
@@ -19,11 +18,12 @@ def basket_add(request):
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('productqty'))
         product = get_object_or_404(Product, id=product_id)
-        basket.add(product=product, qty=product_qty)
+        if product.stock >= product_qty:
+            basket.add(product=product, qty=product_qty)
+            basketqty = basket.__len__()
+            response = JsonResponse({'qty': basketqty})
+            return response
 
-        basketqty = basket.__len__()
-        response = JsonResponse({'qty': basketqty})
-        return response
 
 
 def basket_delete(request):
@@ -42,14 +42,15 @@ def basket_update(request):
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('productqty'))
-    
-        basket.update(product=product_id, qty=product_qty)
+        product = get_object_or_404(Product, id=product_id)
+        if product.stock >= product_qty:
+            basket.update(product=product_id, qty=product_qty)
 
-        basketqty = basket.__len__()
-        basketsubtotal = basket.get_subtotal_price()
-        basket_total = basket.get_total_price()
-        productquantity = product_qty
-        response = JsonResponse({'qty': basketqty, 'total': basket_total, 'subtotal': basketsubtotal, 'productquantity': productquantity})
-        return response
+            basketqty = basket.__len__()
+            basketsubtotal = basket.get_subtotal_price()
+            basket_total = basket.get_total_price()
+            productquantity = product_qty
+            response = JsonResponse({'qty': basketqty, 'total': basket_total, 'subtotal': basketsubtotal, 'productquantity': productquantity})
+            return response
 
             

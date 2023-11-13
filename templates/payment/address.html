@@ -30,13 +30,13 @@
                 <a href="{% url 'payment:edit_address' address.id  %}" class="btn btn-warning btn-sm">Edit</a>
                 &nbsp;
                 <!-- Delete button -->
+                {% if not address.flag  %}
                 <a href="{% url 'payment:delete_address' address.id %}" class="btn btn-danger btn-sm">Delete</a>
                 &nbsp;
-                {% if not address.flag  %}
                   
                 <a href="{% url 'payment:address_active' address.id  %}" class="btn btn-primary btn-sm">Make active</a>
-                {% else %}
-                <p>Active</p>
+        
+            
                 {% endif %}
               </div>
               <br>

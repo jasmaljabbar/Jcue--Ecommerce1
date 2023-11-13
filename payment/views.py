@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from admin_sid.models import Product
 from basket.basket import Basket
 from orders.models import Order, OrderItem
 from payment.models import Address
@@ -8,6 +9,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 import uuid
 from datetime import datetime
+
+
 
 
 
@@ -48,9 +51,9 @@ def address(request):
                     post_code=billing_address.post_code,
                     total_paid=total_paid,
                     order_key=order_key,
-                    billing_status=False  
+                    billing_status=paymentmethod  
                 )
-                
+              
                 order_id = order.pk
 
    
@@ -61,13 +64,15 @@ def address(request):
                         price=item['price'],
                         quantity=item['qty']
                     )
-
+                    product = item['product']
+                    product.stock -= item['qty']
+                    product.save()
                 
                 basket.clear()
 
                 return render(request, 'payment/orderplaced.html')
-
-    return render(request, 'payment/address.html')
+    billing_address = Address.objects.filter(user=request.user)
+    return render(request, 'payment/address.html',{'billing_address':billing_address})
 
 
 def address_active(request,aid):
@@ -133,7 +138,8 @@ def delete_address(request, aid):
         return redirect('payment:address')
     address.delete()
     messages.success(request, "Address deleted successfully.")
-    return redirect('payment:address')
+    
+    return redirect('payment:BasketView')
 
 
 @login_required
@@ -147,9 +153,12 @@ def BasketView(request):
         pincode = request.POST.get('pincode', '')
         addresses = Address.objects.all()
         if addresses:
-            active_address = addresses.get(flag=True)
-            active_address.flag = False
-            active_address.save()
+            try:
+                active_address = addresses.get(flag=True)
+                active_address.flag = False
+                active_address.save()
+            except:
+                pass
 
         # Ensure the user is properly authenticated
         if request.user.is_authenticated:
@@ -169,7 +178,34 @@ def BasketView(request):
 
 
 
+# -----------------------------------------
+def oreder_view(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request,'payment/orders.html',{'orders':orders})
+
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+    return render(request, 'payment/order_detail.html', {'order': order, 'order_items': order_items})
+
+
+def order_cancel(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    
+    if request.method == 'POST':
+        order_items = order.items.all()
+
+        for order_item in order_items:
+            product = order_item.product
+            product.stock += order_item.quantity
+            product.save()
+            
+        order.status = 'canceled'
+        order.save()
         
+        return render(request, 'payment/order_detail.html', {'order': order})
+
+    return render(request, 'payment/order_detail.html', {'order': order})
 
 
 

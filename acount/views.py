@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
-
+from django.contrib.auth.hashers import make_password
 from acount.models import User_profile
+from orders.models import Order
 from .utils import send_otp
 import pyotp
 from django.db.models import Q
@@ -129,7 +130,7 @@ def login_perform(request):
                         return redirect('home')
                 else:
                     messages.error(request, "Username or password is incorrect")
-                    return redirect('home')
+                    return redirect('user_login')
             else:
                 messages.error(request, "User is Blocked")
                 return redirect('user_login')
@@ -172,23 +173,31 @@ def view_product(request,pid):
     return render(request,'app/view_product.html',{'vi_product':vi_product})
 
 @login_required
-def userprofile(request):
-    try:
-        user_profile = User_profile.objects.get(user=request.user)
-    except User_profile.DoesNotExist:
-        user_profile = None
 
-    return render(request, 'app/user_profile.html', {'user_profile': user_profile})
+def userprofile(request):
+    if request.user.is_authenticated :
+        try:
+            order = Order.objects.filter(user=request.user)
+            user_profile = User_profile.objects.get(user=request.user)
+        except User_profile.DoesNotExist:
+            user_profile = None
+
+        return render(request, 'app/user_profile.html', {'user_profile': user_profile , 'order': order})
+    else:
+        return redirect('home')
 
 
 @login_required
 def edit_profile(request):
-    try:
-        user_profile = User_profile.objects.get(user=request.user)
-    except User_profile.DoesNotExist:
-        user_profile = User_profile.objects.create(user=request.user)
+    if request.user.is_authenticated :
+        try:
+            user_profile = User_profile.objects.get(user=request.user)
+        except User_profile.DoesNotExist:
+            user_profile = User_profile.objects.create(user=request.user)
 
-    return render(request, 'app/edit_profile.html', {'user_profile': user_profile})
+        return render(request, 'app/edit_profile.html', {'user_profile': user_profile})
+    else:
+        return redirect('home')
 
 @login_required
 def edit_profileaction(request):
@@ -224,3 +233,95 @@ def log_out(request):
 
 
 
+# ------------------------------forgot_password-----------
+
+def forget_password_action(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        user = User.objects.get(email=email)
+
+        if user:
+            request.session['id'] = user.pk
+            request.session['mail'] = email
+            send_otp(request)
+            return redirect('for_otp')
+        else:
+            messages.error(request, 'User with the given email does not exist.')
+            return render(request, 'app/userlogin.html')
+
+    return render(request, 'app/userlogin.html')
+
+
+
+
+def for_otp(request):
+    return render(request, 'app/forgetOtp.html')
+
+def forget_otp(request):
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        otp_key = request.session.get('otp_key')
+        otp_valid = request.session.get('otp_valid')
+        
+        print("Entered OTP:", otp)
+        print("Stored OTP Key:", otp_key)
+        print("Stored OTP Validity:", otp_valid)
+
+        if otp_key and otp_valid is not None:
+            valid_otp = datetime.fromisoformat(otp_valid)
+            if valid_otp > datetime.now():
+                totp = pyotp.TOTP(otp_key, interval=60)
+                if totp.verify(otp):
+                    print("OTP Verified Successfully!")
+                    return redirect('new_password')
+                else:
+                    messages.error(request, 'Invalid Otp')
+                    return redirect('for_otp')
+            else:
+                clear_session(request)
+                messages.error(request, 'Otp expired')
+                return redirect('for_otp')
+        else:
+            clear_session(request)
+            messages.error(request, 'Didn\'t get any otp')
+            return redirect('for_otp')
+
+    return redirect('for_otp')
+
+
+def forgot_password(request):
+    id = request.session.get('id')
+    print("User ID from session:", id)
+    return render(request, 'app/forgetpassword.html')
+
+
+from django.shortcuts import render, redirect
+
+def new_password(request):
+    if request.method == 'POST':
+        password_1 = request.POST.get('password_1')
+        password_2 = request.POST.get('password_2')
+
+        if password_1 == password_2:
+            email = request.session.get('mail')
+            user = User.objects.get(email=email)
+            hashed_password = make_password(password_1)
+            user.password = hashed_password
+            user.save()
+
+            # Clear the session
+            request.session.clear()
+
+            return redirect('user_login')
+
+    return render(request, 'app/newpassword.html')
+
+
+
+
+
+
+
+
+
+    

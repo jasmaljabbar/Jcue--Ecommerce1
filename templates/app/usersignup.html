@@ -139,6 +139,16 @@
         }
     });
     
+    document.getElementById('username').addEventListener('blur', function () {
+      var firstName = this.value;
+      if (!noSpacesRegex.test(firstName)) {
+          displayError('username', 'Name is required.');
+      } else {
+          clearError('username');
+      }
+   });
+
+
     document.getElementById('password_1').addEventListener('blur', function () {
         var password1 = this.value;
         if (!passwordRegex.test(password1)) {

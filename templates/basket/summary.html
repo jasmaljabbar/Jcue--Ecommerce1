@@ -87,7 +87,7 @@
             class="fw-bold h5">{{basket.get_total_price}}</span>
         </div>
         <div class="d-grid gap-2 mt-3">
-          <a role="button" href="{% url 'payment:address' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
+          <a role="button" href="{% url 'payment:BasketView' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
           <button class="btn btn-light" type="button">Save for later</button>
         </div>
       </div>
@@ -113,6 +113,8 @@
         action: "post",
       },
       success: function (json) {
+        alert("Are you sure?");
+        window.location.reload();
         $('.product-item[data-index="' + prodid + '"]').remove();
 
         if (json.qty == 0) {
@@ -138,7 +140,7 @@
         updateQuantity($(this), 1);
     });
 
-    // Handle the decrement button click
+    // Han dle the decrement button click
     $(document).on('click', '.decrement-button', function () {
         updateQuantity($(this), -1);
     });
@@ -162,12 +164,16 @@
                     action: 'post',
                 },
                 success: function (json) {
+                    window.location.reload();
+                    console.log(json);
                     document.getElementById('basket-qty').innerHTML = json.qty
                     document.getElementById('subtotal').innerHTML = json.subtotal
                     document.getElementById('cart-total').innerHTML = json.total
                     document.getElementById('total').innerHTML = json.total
                     document.getElementById('productquantity').innerHTML = json.productquantity
+
                 },
+                
                 error: function (xhr, errmsg, err) { }
             });
         } else {

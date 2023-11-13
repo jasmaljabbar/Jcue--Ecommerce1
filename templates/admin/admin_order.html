@@ -1,0 +1,47 @@
+{% extends "admin/admin_dsh.html" %}
+{% block main %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Order History</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Order Id</th>
+                                <th>Customers</th>
+                                <th>Order Status</th>
+                                <th>Date</th>
+                                <th>Payment Status</th>
+                                <th>Total Amount</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}   
+                                <tr>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.order.full_name }}</td>
+                                    <td>
+                                        <select name="status" id="status" onchange="updateStatus('{{ order.id }}', this.value)">
+                                            {% for status, _ in order.order.ORDER_STATUS_CHOICES %}
+                                                <option value="{{ status }}" {% if order.order.status == status %}selected{% endif %}>{{ order.order.status }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>{{ order.order.created }}</td>
+                                    <td>{{ order.order.billing_status }}</td>
+                                    <td>₹{{ order.order.total_paid }}</td>
+                                    <td><a href="#">View</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

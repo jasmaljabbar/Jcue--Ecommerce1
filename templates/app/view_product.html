@@ -57,12 +57,10 @@
                     </th>
                 </tr>
             </table>
-            {% if vi_product.stock > 0 %}
             <div class="my-5">
                 <button type="button" id="add-button" value="{{vi_product.id}}" class="btn btn-success fw500">Add to
                     Cart</button>
                 <a href="" class="btn btn-primary mx-2 px-2">Buy Now</a>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -77,7 +75,7 @@
         });
     });
     $(document).on('click', '#add-button', function (e) {
-        e.preventDefault();
+        //e.preventDefault();
         $.ajax({
           type: 'POST',
           url: '{% url "basket:basket_add" %}',
@@ -88,7 +86,9 @@
             action: 'post'
           },
           success: function (json) {
-            document.getElementById("basket-qty").innerHTML = json.qty
+            //alert("success");
+            window.location.reload();
+            document.getElementById("basket-qty").innerHTML = json.qty;
           },
           error: function (xhr, errmsg, err) {}
         });

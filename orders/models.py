@@ -1,11 +1,7 @@
 from django.db import models
 from decimal import Decimal
 from django.conf import settings
-from django.db import models
-
-from  admin_sid.models import Product
-
-# Create your models here.
+from admin_sid.models import Product
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='order_user', null=True, blank=True)
@@ -19,13 +15,25 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True, blank=True)
     total_paid = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     order_key = models.CharField(max_length=200, null=True, blank=True)
-    billing_status = models.BooleanField(default=False)
+    billing_status = models.CharField(max_length=10,)
+
+    # New field for order status
+    ORDER_STATUS_CHOICES = [
+        ('confirmed', 'Order Confirmed'),
+        ('shipped', 'Shipped'),
+        ('out_for_delivery', 'Out for Delivery'),
+        ('delivered', 'Delivered'),
+        # Add more statuses as needed
+    ]
+
+    status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='confirmed')
 
     class Meta:
         ordering = ('-created',)
     
     def __str__(self):
-        return str(self.created)
+        return f"{self.created} - {self.status}"
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,
