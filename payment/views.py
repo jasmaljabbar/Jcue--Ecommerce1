@@ -187,7 +187,8 @@ def BasketView(request):
 # -----------------------------------------
 def oreder_view(request):
     orders = Order.objects.filter(user=request.user)
-    return render(request,'payment/orders.html',{'orders':orders})
+    order_statuses = {order.id: order.status for order in orders}   
+    return render(request,'payment/orders.html',{'orders':orders ,  'order_statuses': order_statuses})
 
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)

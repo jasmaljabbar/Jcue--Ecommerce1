@@ -45,9 +45,26 @@
         </div>
     </div>
 </div>
+
 <!-- <script>
-    $(document).on("click", ".cancel-order", function (e){
-        alert("Are you sure?");
-    })
+    // Assume orderStatus is a variable passed from your server-side code with the initial order status
+    var orderStatus = "{{ order.status }}";
+
+    // Update the status display on page load
+    updateStatusDisplay(orderStatus);
+
+    function updateStatusDisplay(status) {
+        var statusElement = document.getElementById("order-status");
+        if (statusElement) {
+            statusElement.innerHTML = 'Status: <span class="' + (status === 'canceled' ? 'text-danger' : '') + '">' + status + '</span>';
+        }
+    }
+
+    // Retrieve the saved order status from local storage and update the display
+    var savedStatus = localStorage.getItem('orderStatus_' + {{ order.id }});
+    if (savedStatus) {
+        updateStatusDisplay(savedStatus);
+    }
 </script> -->
+
 {% endblock %}

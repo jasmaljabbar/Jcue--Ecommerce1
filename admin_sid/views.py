@@ -310,13 +310,22 @@ def brand_action(request, bid):
     brand.save()
     return redirect('show_brand')
 
-def order(request):
-
-    
-    orders= OrderItem.objects.all()
-    
-    
+def order(request):  
+    orders= Order.objects.all()       
+    if request.method == 'POST':
+        order_id = request.POST.get('orderId')
+        selected_status = request.POST.get('status')
+        order_item = Order.objects.get(id=order_id)
+        order_item.status = selected_status
+        order_item.save()
+        messages.success(request,'succesfully updated')
     return render(request, 'admin/admin_order.html', {'orders': orders})
+    
+
+
+def order_details(request,oid):
+    orders= Order.objects.get(id=oid)
+    return render(request ,'admin/order_details.html',{'orders':orders})
 
 
 

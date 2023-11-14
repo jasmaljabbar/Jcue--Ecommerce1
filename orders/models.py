@@ -34,6 +34,16 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.created} - {self.status}"
 
+    @classmethod
+    def get_user_order_status(cls, user):
+        """
+        Get the status of the latest order for a specific user.
+        """
+        latest_order = cls.objects.filter(user=user).order_by('-created').first()
+        if latest_order:
+            return latest_order.status
+        return None
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,

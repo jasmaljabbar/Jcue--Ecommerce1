@@ -157,3 +157,9 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jcuejqtips@gmail.com'
 EMAIL_HOST_PASSWORD = 'lcpx hcyb naxq fbub'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # Add other backends as needed
+]

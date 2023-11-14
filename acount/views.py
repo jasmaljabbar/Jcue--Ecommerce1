@@ -313,6 +313,9 @@ def new_password(request):
             request.session.clear()
 
             return redirect('user_login')
+        else:
+            messages.error(request, 'password is not match')
+            return render(request,'app/newpassword.html')
 
     return render(request, 'app/newpassword.html')
 
