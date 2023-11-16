@@ -29,7 +29,7 @@
                             </li>
                         {% endfor %}
                     </ul>
-
+                    <p>payment method:{{order.billing_status}}</p>
                     <p>Status: <span class="{% if order.status == 'canceled' %}text-danger{% endif %}">{{ order.get_status_display }}</span></p>
 
                     {% if order.status == 'confirmed' %}

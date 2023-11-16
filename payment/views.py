@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404
 from admin_sid.models import Product
 from basket.basket import Basket
@@ -6,7 +7,7 @@ from payment.models import Address
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect , JsonResponse
 import uuid
 from datetime import datetime
 
@@ -75,11 +76,59 @@ def address(request):
                 basket.clear()
 
                 return render(request, 'payment/orderplaced.html')
-    
+            else:
+                return render(request, 'payment/UPI.html')
     billing_address = Address.objects.filter(user=request.user)
     return render(request, 'payment/address.html', {'billing_address': billing_address})
 
+def upi_paypal_com(request):
+    billing_address = get_object_or_404(Address, user=request.user, flag=True)
+    
+    if request.method == 'POST':
+        basket = Basket(request)
+        
+        if billing_address:
+            body = json.loads(request.body)
+            paymentmethod = body.get('paymentmethod')
+            print(paymentmethod)
+            total_paid = basket.get_total_price()
+            order_key = generate_order_key()
+            
+            for item in basket:
+                product = item['product']
+                if item['qty'] > product.stock:
+                    basket.clear()
+                    billing_address = Address.objects.filter(user=request.user)
+                    return render(request, 'payment/address.html', {'message': f"Insufficient stock for {product.title}",'billing_address':billing_address})
+            
+            order = Order.objects.create(
+                user=request.user,
+                full_name=billing_address.full_name,
+                address1=billing_address.address1,
+                address2=billing_address.address2,
+                city=billing_address.city,
+                phone=billing_address.phone,
+                post_code=billing_address.post_code,
+                total_paid=total_paid,
+                order_key=order_key,
+                billing_status=paymentmethod  
+            )
+            
+            order_id = order.pk
 
+            for item in basket:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item['product'],
+                    price=item['price'],
+                    quantity=item['qty']
+                )
+                product = item['product']
+                product.stock -= item['qty']
+                product.save()
+            
+            basket.clear()
+    return JsonResponse('Payment completed',safe=False)
 
 def address_active(request,aid):
     billing_address = Address.objects.get(id=aid)
