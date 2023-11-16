@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from orders.models import Order, OrderItem
 from .models import *
@@ -36,13 +36,14 @@ def add_category(request):
 def add_category_action(request):
     if request.method == 'POST':
         new_category = request.POST.get('new_category')
+        img = request.FILES.get('img')
         existing_category = Category.objects.filter(title=new_category)
 
         if existing_category.exists():
             messages.error(request, 'Category already exists')
             return redirect('add_category')
         else:
-            category = Category(title=new_category)
+            category = Category(title=new_category,image=img)
             category.save()
 
     return redirect('show_category')
@@ -56,19 +57,36 @@ def edit_category(request,cid):
         return redirect ('home')
 
 def edt_category_action(request):
-    if request.method== 'POST':
-        id = request.POST.get('id')
-        name = request.POST.get('newcategory')
-        existing_category = Category.objects.filter(title=name)
+    if request.method == 'POST':
+        category_id = request.POST.get('id')
+        new_category_name = request.POST.get('newcategory')
+        new_category_img = request.FILES.get('img')
+
+        # Validation and Sanitization
+        if not category_id or not new_category_name:
+            messages.error(request, 'Invalid data received.')
+            return redirect('add_category')  # You might want to redirect to an appropriate page
+
+        existing_category = Category.objects.filter(title=new_category_name).exclude(id=category_id)
         if existing_category.exists():
             messages.error(request, 'Category already exists')
             return redirect('add_category')
-        else:
-            category = Category.objects.get(id=id)
-            category.title = name
-            category.save()
-            return redirect('show_category')
-    
+
+        # Fetch the existing category
+        category = get_object_or_404(Category, id=category_id)
+
+        # Update the category details
+        category.title = new_category_name
+
+        if new_category_img:
+            # Handle the new image, if provided
+            category.image = new_category_img
+
+        # Save the changes
+        category.save()
+
+        # Redirect using reverse URL
+        return redirect('show_category')
 
 
 @never_cache
@@ -320,7 +338,7 @@ def order(request):
         order_item.save()
         messages.success(request,'succesfully updated')
     return render(request, 'admin/admin_order.html', {'orders': orders})
-    
+
 
 
 def order_details(request,oid):

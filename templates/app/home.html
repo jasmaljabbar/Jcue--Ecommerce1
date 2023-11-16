@@ -21,6 +21,53 @@
 </div>
 {% endblock banner_slider %}
 {% block main-content %}
+<style>
+  body {
+      text-align: center;
+  }
+
+  .image-container {
+      display: inline-block;
+      text-align: left; /* Align buttons to the left within the container */
+  }
+
+  .image-item {
+      display: inline-block;
+      margin: 10px;
+      text-align: center;
+  }
+
+  .image-button {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+  }
+
+  .image-button img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+  }
+
+  .image-name {
+      margin-top: 5px;
+  }
+</style>
+<br>
+<div class="image-container">
+  {% for category in cat %}
+    <div class="image-item">
+      <a class="dropdown-item" href="{% url 'category_search' category.id %}">
+        <img src="{{ category.image.url }}" alt="{{ category.title }}" style="width: 90pxx; height: 60px;">
+      </a>
+      <p class="image-name">{{ category.title }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+
+ 
+
 
   
     <div class="container mt-4"> 
@@ -37,7 +84,7 @@
             <div class="product-card-body">
               <p class="product-brand">{{ p.brand.name }}</p>
               <h5 class="product-name">{{ p.name }}</h5>
-              <div class="price">
+              <div class="price"> 
                 <div class="discount-price">
                   <span class="selling-price">₹{{ p.price }}</span>
                   <span class="discount-tag">{{ p.discount }}% off</span>

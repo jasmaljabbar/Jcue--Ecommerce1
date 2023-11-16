@@ -15,6 +15,7 @@ urlpatterns = [
     path('new_password', views.new_password, name='new_password'),
     path('category_search/<int:uid>', views.category_search, name='category_search'),
     path('search', views.search, name='search'),
+    path('price_filter', views.price_filter, name='price_filter'),
     path('view_product/<int:pid>', views.view_product, name='view_product'),
     path('userprofile', views.userprofile, name='userprofile'),  # Updated URL pattern
     path('edit_profile', views.edit_profile, name='edit_profile'),  #  URL pattern
