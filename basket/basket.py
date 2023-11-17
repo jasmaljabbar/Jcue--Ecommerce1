@@ -4,7 +4,7 @@ from django.conf import settings
 
 from admin_sid.models import Product
 
-
+from .models import CartItem
 
 
 class Basket():
@@ -12,6 +12,21 @@ class Basket():
     A base Basket class, providing some default behaviors that
     can be inherited or overrided, as necessary.
     """
+
+    def __init__(self, user):
+        self.user = user
+
+    def add(self, product, qty):
+        cart_item, created = CartItem.objects.get_or_create(
+            user=self.user,
+            product=product,
+            defaults={'quantity': qty}
+        )
+
+        if not created:
+            cart_item.quantity += qty
+            cart_item.save()
+
 
     def __init__(self, request):
         self.session = request.session
