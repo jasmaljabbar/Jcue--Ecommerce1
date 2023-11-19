@@ -13,13 +13,20 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from admin_sid.models import *
+from basket.models import CartItem , WishItem
 
 # Create your views here.
 
 
 @never_cache
 def home(request):
+    user = request.user
     product = Product.objects.all()
+
+    for p in product:
+        p.in_basket = CartItem.objects.filter(user=user, product=p).exists()
+        p.in_wishlist_count = WishItem.objects.filter(user=user, product=p).exists()
+
     return render(request, "app/home.html", {"product": product})
 
 

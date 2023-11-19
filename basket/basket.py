@@ -1,131 +1,103 @@
 from decimal import Decimal
-
+from django.contrib.auth.models import User
 from django.conf import settings
-
 from admin_sid.models import Product
+from .models import CartItem, Cart
 
-from .models import CartItem
-
-
-class Basket():
-    """
-    A base Basket class, providing some default behaviors that
-    can be inherited or overrided, as necessary.
-    """
-
-    def __init__(self, user):
-        self.user = user
-
-    def add(self, product, qty):
-        cart_item, created = CartItem.objects.get_or_create(
-            user=self.user,
-            product=product,
-            defaults={'quantity': qty}
-        )
-
-        if not created:
-            cart_item.quantity += qty
-            cart_item.save()
+# basket.py
 
 
-    def __init__(self, request):
+class Basket:
+    def __init__(self, request, user=None):
         self.session = request.session
-        basket = self.session.get(settings.BASKET_SESSION_ID)
-        if settings.BASKET_SESSION_ID not in request.session:
-            basket = self.session[settings.BASKET_SESSION_ID] = {}
-        self.basket = basket
+        self.user = user or request.user
+        self.restore_session_data()
+
+    def restore_session_data(self):
+        if self.user.is_authenticated:
+            print(f"User: {self.user}")
+            cart, created = Cart.objects.get_or_create(user=self.user)
+            self.user.cart = cart  # Associate the Cart instance with the user
+            print(f"User Cart: {self.user.cart}")
+
+    def clear_session(self):
+        if self.user.is_authenticated:
+            del self.session[settings.BASKET_SESSION_ID]
+            self.session.modified = True
 
     def add(self, product, qty):
-        """
-        Adding and updating the users basket session data
-        """
         product_id = str(product.id)
-
-        if product_id in self.basket:
-            self.basket[product_id]['qty'] = qty
+        if self.user.is_authenticated:
+            self.user.cart.add_item_to_db(product, qty)
+            print(f"Item added to user's cart: {product} - Qty: {qty}")
         else:
-            self.basket[product_id] = {'price': str(product.price), 'qty': qty}
+            if product_id in self.basket:
+                self.basket[product_id]["qty"] += qty
+            else:
+                self.basket[product_id] = {"price": str(product.price), "qty": qty}
+            self.save()
+            print(f"Item added to session basket: {product} - Qty: {qty}")
 
-        self.save()
 
-    def get_productquantity(self, product, qty):
-        """
-        Return cart item quantity
-        """
-        print("wuantiyt"+qty)
-        if qty is None:
-            return float(1)
-            
-        if product in self.basket:
-            return float(qty)
+    def update(self, product, qty):
+        product_id = str(product.id)
+        if self.user.is_authenticated:
+            self.user.cart.update_item_in_db(product, qty)
+        else:
+            if product_id in self.basket:
+                self.basket[product_id]["qty"] = qty
+            self.save()
+
+    def delete(self, product):
+        product_id = str(product.id)
+        if self.user.is_authenticated:
+            self.user.cart.delete_item_from_db(product)
+        else:
+            if product_id in self.basket:
+                del self.basket[product_id]
+                self.save()
+
+    def save(self):
+        if not self.user.is_authenticated:
+            self.session[settings.BASKET_SESSION_ID] = self.basket
+            self.session.modified = True
+
+    def get_total_price(self):
+        if self.user.is_authenticated:
+            return self.user.cart.get_total_price()
+        else:
+            return sum(
+                Decimal(item["price"]) * item["qty"] for item in self.basket.values()
+            )
+
+    def get_subtotal_price(self):
+        if self.user.is_authenticated:
+            return self.user.cart.get_subtotal_price()
+        else:
+            return sum(
+                Decimal(item["price"]) * item["qty"] for item in self.basket.values()
+            )
+
+
 
 
     def __iter__(self):
-        """
-        Collect the product_id in the session data to query the database
-        and return products
-        """
-        product_ids = self.basket.keys()
-        products = Product.objects.filter(id__in=product_ids)
-        basket = self.basket.copy()
+        if self.user.is_authenticated:
+            return iter(self.user.cart.items.all())
+        else:
+            return iter(self.items)
 
-        for product in products:
-            basket[str(product.id)]['product'] = product
-
-        for item in basket.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['qty']
-            yield item
+    
+    
+    @property
+    def items(self):
+        # Assuming CartItem is the model representing items in the basket
+        if self.user:
+            return CartItem.objects.filter(user=self.user)
+        else:
+            # Handle the case where the basket is not associated with a user
+            return []
 
     def __len__(self):
-        """
-        Get the basket data and count the qty of items
-        """
-        return sum(item['qty'] for item in self.basket.values())
+        return len(self.items)
 
-    def update(self, product, qty):
-        """
-        Update values in session data
-        """
-        product_id = str(product)
-        if product_id in self.basket:
-            self.basket[product_id]['qty'] = qty
-        self.save()
-
-    def get_subtotal_price(self):
-        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
-
-    def get_total_price(self):
-    
-        subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
-
-        if subtotal == 0:
-            shipping = Decimal(0.00)
-        else:
-            shipping = Decimal(11.50)
-
-        total = subtotal + Decimal(shipping)
-        return round(total, 2)
-    def shipping_price(self):
-        if self.__len__() != 0:
-            return (Decimal(11.50))
-        return (Decimal(0))
-
-    def delete(self, product):
-        """
-        Delete item from session data
-        """
-        product_id = str(product)
-  
-
-        if product_id in self.basket:
-            del self.basket[product_id]
-            self.save()
-
-    def clear(self):
-        # Remove basket from session
-        del self.session[settings.BASKET_SESSION_ID]
-        self.save()
-
-    def save(self):
-        self.session.modified = True

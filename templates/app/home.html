@@ -134,17 +134,17 @@ Home
   .product-cart button {
     border: 0;
     border-radius: 0 0 10px 10px;
-    color: #f5f6fa;
+    
     cursor: pointer;
     font-family: inherit;
     padding: 1em;
     text-transform: uppercase;
-    background-color: #3498db;
+
     width: 100%;
     transition: background-color 0.3s ease-in-out;
   }
 
-  .product-cart button:hover {
+  .product button:hover {
     background-color: #2980b9;
     font-weight: 500;
     letter-spacing: .1em;
@@ -166,27 +166,49 @@ Home
 <div class="container p-5">
   <div class="row">
     {% for p in product %}
-    {% if p.active %}
-    <div class="col-md-3 col-sm-6 mb-4">
-      <div class="product-card">
-        <div class="product-img">
-          <a href="{% url 'basket:add_to_wishlist' p.id %}"><i class="fas fa-heart wishlist-icon"></i></a>
-          <a href="{% url 'view_product' p.id %}">
-            <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
-          </a>
-        </div>
-        <div class="product-details">
-          <h4>{{ p.title }}</h4>
-          <div class="product-cart">
-            <button type="button" class="add-to-cart-button" data-productid="{{ p.id }}">Add to cart</button>
+      {% if p.active %}
+        <div class="col-md-3 col-sm-6 mb-4">
+          <div class="product-card">
+            <div class="product-img">
+              {% if p.in_wishlist_count %}
+                
+              <a href="{% url 'basket:add_to_wishlist' p.id %}">
+                <i class="fas fa-heart wishlist-icon " style="color: red;"></i>
+              </a>
+              {% else %}
+              <a href="{% url 'basket:add_to_wishlist' p.id %}">
+                <i class="fas fa-heart wishlist-icon"></i>
+              </a>
+              {% endif %}
+              <a href="{% url 'view_product' p.id %}">
+                <img src="{{ p.image1.url }}" class="card-img-top" alt="{{ p.name }}">
+              </a>
+            </div>
+            <div class="product-details">
+              <h4>{{ p.title }}</h4>
+              {% if p.stock > 0 %}
+                <div class="product-cart">
+                  {% if p.in_basket %}
+                    <a href="{% url 'basket:basket_summary' %}">
+                      <button type="button" class="btn btn-primary">Go to Cart</button>
+                    </a>
+                  {% else %}
+                    <button type="button" class="add-to-cart-button btn btn-primary" data-productid="{{ p.id }}">Add to Cart</button>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="product-cart">
+                  <button class="btn-danger">Out of Stock</button>
+                </div>
+              {% endif %}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    {% endif %}
+      {% endif %}
     {% endfor %}
   </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
