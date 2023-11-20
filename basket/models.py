@@ -73,6 +73,11 @@ class Cart(models.Model):
     def delete_item_from_db(self, product):
         CartItem.objects.filter(user=self.user, product=product).delete()
 
+    
+    def clear_cart_in_db(self):
+        # Assuming you have a related manager called 'items'
+        self.items.all().delete()
+
     def save_to_db(self):
         self.save()
 

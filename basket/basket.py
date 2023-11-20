@@ -20,8 +20,11 @@ class Basket:
             self.user.cart = cart  # Associate the Cart instance with the user
             print(f"User Cart: {self.user.cart}")
 
-    def clear_session(self):
+    
+    def clear(self):
         if self.user.is_authenticated:
+            self.user.cart.clear_cart_in_db()
+        else:
             del self.session[settings.BASKET_SESSION_ID]
             self.session.modified = True
 
