@@ -21,13 +21,19 @@ from basket.models import CartItem , WishItem
 @never_cache
 def home(request):
     user = request.user
-    product = Product.objects.all()
+    products = Product.objects.all()
 
-    for p in product:
-        p.in_basket = CartItem.objects.filter(user=user, product=p).exists()
-        p.in_wishlist_count = WishItem.objects.filter(user=user, product=p).exists()
+    for p in products:
+        # Initialize in_basket and in_wishlist_count to False or 0
+        p.in_basket = False
+        p.in_wishlist_count = 0
+        
+        # Check if the user is authenticated before querying CartItem and WishItem
+        if user.is_authenticated:
+            p.in_basket = CartItem.objects.filter(user=user, product=p).exists()
+            p.in_wishlist_count = WishItem.objects.filter(user=user, product=p).exists()
 
-    return render(request, "app/home.html", {"product": product})
+    return render(request, "app/home.html", {"product": products})
 
 
 def sign_up(request):
